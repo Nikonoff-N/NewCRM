@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="uft-8">
+    <title>Spark! CRM</title>
+    {% load static %}
+    <link rel="icon" type="image/ico" href={% static 'crm/img/favicon.ico' %}>
+
+</head>
+
+<body>
+<p>Привет, это индекс! Вы вошли как {{username}}</p><a href = "{% url 'logoutView' %}">Выйти</a>
+<a href = "{%url 'CRM_clients' %}">Клиенты</a>
+<a href = "{%url 'CRM_Lessons' %}">Уроки</a>
+<a href = "{%url 'CRM_payments' %}">Платежи</a>
+</body>
+
+</html>

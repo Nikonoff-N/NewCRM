@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="uft-8">
+        <title>Добавить урок</title>
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'crm/styles.css' %}">
+    </head>
+    <body>
+        <a href = "{% url 'index' %}">В начало</a><br>
+        <form action={%url 'lessonSuccess'%} method="post">
+        {% csrf_token %}
+        <label for = "name">Название</label>
+        <input type = "text" name = "name"><br>        
+            <label for = "teacher">Учитель</label><br>
+            <select id = "teacher" name = "teacher">
+                {%for teacher in active_teachers%}
+                    <option value = "{{teacher.pk}}">{{teacher.name}}</option>
+                {%endfor%}
+            </select>
+            <label for = "price">Цена для ученика</label>
+            <select id = "price" name = "price">
+                <option value = "300">300</option>
+                <option value = "350">350</option>
+                <option value = "500">500</option>
+            </select>
+            <hr>
+            <h5>Клиенты</h5>
+            {% for student in active_students %}
+                <input type="checkbox" id="student{{student.pk}}" name = "student{{student.pk}}" value = "student{{student.pk}}">
+                <label for = "student{{student.pk}}">{{student.name}}</label><br>
+            {% endfor %}
+            <hr>
+            <label for = "date">Дата</label><br>
+            <input type = "date" name = "date">
+            <br>
+            <input type = "submit" value = "Добавить урок">
+        </form>
+    </body>
+</html>

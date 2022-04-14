@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Spark!</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+    {% load static %}
+    <link rel="icon" type="image/ico" href={% static 'crm/img/favicon.ico' %}>
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{% static 'crm/loginStyle.css' %}">
+<!--===============================================================================================-->
+    <meta name="robots" content="noindex, follow">
+</head>
+<body>
+    <div class = "limiter">
+        {% load static %}
+        <div class="container-login" style ="background-image:url({% static 'crm/img/backgroundWide.jpg' %});">
+            <div class = "extraLayer">
+                <div class = "wrap-login">
+                    <div class="login-img-holder">
+                        <img src = "{% static 'crm/img/logo.jpg' %}">
+                    </div>
+                    <form action="{% url 'loginCheck' %}" method="post">
+                        {% csrf_token %}
+                        <span class = "login-heading">Вход</span>
+                        <div class = "login-email-field-wrapper">
+                            <input class = "input100" type = "text" name = "username" placeholder="Email">
+                            <span class = "focus-input100"></span>
+                            <span class="symbol-input100">
+                                <i class="fa fa-envelope" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                        <div class = "login-email-field-wrapper">
+                            <input class = "input100" type="password" name="password" placeholder="Пароль">
+                            <span class = "focus-input100"></span>
+                            <span class="symbol-input100">
+                                <i class="fa fa-lock" aria-hidden="true"></i>
+                            </span>                        
+                        </div>
+                        <div class="login-btn-wrap">
+                            <input class = "login-button" type="submit" value="Войти">
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Spark!</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+        <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+    <!--===============================================================================================-->
+        {% load static %}
+        <link rel="icon" type="image/ico" href={% static 'crm/img/favicon.ico' %}>
+        <link rel="stylesheet" type="text/css" href="{% static 'crm/loginStyle.css' %}">
+    <!--===============================================================================================-->
+        <meta name="robots" content="noindex, follow">
+    </head>
+    <body>
+        <div class = "limiter">
+            {% load static %}
+            <div class="container-login" style ="background-image:url({% static 'crm/img/backgroundWide.jpg' %});">
+                <div class = "extraLayer">
+                    <div class = "wrap-login">
+                        <h1>У вас нет прав на просмотр этой страницы</h1>
+                        <div class="login-btn-wrap">
+                            <a class = "login-button" href = "{% url 'loginView' %}">Войти</a>
+                        </div>
+                        <div class="login-btn-wrap">
+                            <a class = "login-button" href = "{% url 'loginView' %}">В начало(пока не работает)</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

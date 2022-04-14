@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="uft-8">
+        <title>Spark! CRM</title>
+        {% load static %}
+        <link rel="icon" type="image/ico" href={% static 'crm/img/favicon.ico' %}>
+    
+        <link rel="stylesheet" type="text/css" href="{% static 'crm/simpleStyle.css' %}">
+    </head>
+    <body>
+        <a class = "button" href = {%url 'index'%}>К индексу</a>
+        <a class = "button" href = {%url 'addLesson'%}>Создать урок</a>
+            <table>
+            <tr>
+                <th>Дата</th>
+                <th>Группа</th>
+                <th>Учитель</th>
+                <th>Цена</th>
+                <th>Студенты</th>
+                <th>Кнопочки</th>
+            </tr>
+            {%for lesson in lessons%}
+                <tr>
+                    <td>{{lesson.date}}</td>
+                    <td>{{lesson.name}}</td>
+                    <td>{{lesson.teacher.name}}</td>
+                    <td>{{lesson.price}}</td>
+                    <td>
+                        {%for s in lesson.clients.all%}
+                            <p>{{s.name}}</p>
+                        {%endfor%}
+                    </td>
+                    <td>bop</td>
+                </tr>
+            {%endfor%}
+        </table>
+    </body>
+</html>

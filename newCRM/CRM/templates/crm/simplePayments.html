@@ -5,12 +5,11 @@
         <title>Spark! CRM</title>
         {% load static %}
         <link rel="icon" type="image/ico" href={% static 'crm/img/favicon.ico' %}>
-    
+        
         <link rel="stylesheet" type="text/css" href="{% static 'crm/simpleStyle.css' %}">
     </head>
     <body>
         <a class = "button" href = {%url 'index'%}>К индексу</a>
-        <a class = "button" href = {%url 'index'%}>Создать платёж</a>
         <button onclick="document.getElementById('newPayment').classList.remove('hidden');">Добавить новый платёж</button>
         <div id='newPayment' class="hidden">
             <form action="{%url 'addPayment' %}" method="post" class='popup'>
@@ -26,6 +25,7 @@
                         </td></tr>
                         <tr><td><label for = "date">Дата</label><input type = "date" name = "date"></td></tr>
                         <tr><td><label for = "value">Кол-во</label><input name = "value" type="number" step="0.01"></td></tr>
+                        <tr><td><label for = "note">Заметка</label><input name = "note" type="text"></td></tr>
                 </table>
                 <input type="submit" value="Добавить платёж">
             </form>
@@ -35,6 +35,7 @@
                 <th>Дата</th>
                 <th>Клиенты</th>
                 <th>Колличество</th>
+                <th>Заметки</th>
                 <th>Кнопочки</th>
             </tr>
             {%for pay in payments%}
@@ -42,6 +43,7 @@
                     <td>{{pay.date}}</td>
                     <td>{{pay.client.name}}</td>
                     <td>{{pay.value}}</td>
+                    <td>{{pay.note}}</td>
                     <td>bop</td>
                 </tr>
             {%endfor%}

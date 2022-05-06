@@ -28,7 +28,7 @@
                     <td>{{lesson.price}}</td>
                     <td>
                         {%for s in lesson.clients.all%}
-                            <p>{{s.name}}</p>
+                        <a class = "clientTag" href = {%url 'index'%}>{{s.name}}</a></br>
                         {%endfor%}
                     </td>
                     <td>bop</td>

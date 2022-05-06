@@ -29,3 +29,26 @@ table th {
 p{
   margin: 5px;
 }
+
+.clientTag {
+	background:linear-gradient(to bottom, #e0e0e0 5%, #d6d6d6 100%);
+	background-color:#e0e0e0;
+	border-radius:28px;
+	border:1px solid #ffffff;
+	display:inline-block;
+	cursor:pointer;
+	color:#000000;
+	font-family:Arial;
+	font-size:17px;
+	padding:1px 31px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #000000;
+}
+.clientTag:hover {
+	background:linear-gradient(to bottom, #d6d6d6 5%, #e0e0e0 100%);
+	background-color:#d6d6d6;
+}
+.clientTag:active {
+	position:relative;
+	top:1px;
+}

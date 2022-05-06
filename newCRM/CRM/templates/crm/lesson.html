@@ -10,8 +10,8 @@
         <a href = "{% url 'index' %}">В начало</a><br>
         <form action={%url 'lessonSuccess'%} method="post">
         {% csrf_token %}
-        <label for = "name">Название</label>
-        <input type = "text" name = "name"><br>        
+        <label for = "name">Название {{name}}</label>
+        <input type = "text" name = "name" value = {{name}}><br>        
             <label for = "teacher">Учитель</label><br>
             <select id = "teacher" name = "teacher">
                 {%for teacher in active_teachers%}

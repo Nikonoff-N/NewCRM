@@ -1,11 +1,14 @@
+from tokenize import group
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.template import loader
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
 from datetime import datetime
-
+import json
 from .models import *
+DAYS = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс']
+
 def index(request):
     if request.user.is_authenticated:
         username = request.user.username
@@ -76,6 +79,7 @@ def refreshClients(request):
         c.money = debet-credit
         c.save()
     return HttpResponseRedirect(reverse('CRM_clients', args=()))
+
 def add_client(request):
     try:
         name = request.POST['name']
@@ -109,10 +113,24 @@ def addLesson(request):
     teachers = Teacher.objects.all()
     template = loader.get_template('crm/lesson.html')
     context = {
+        'name':"",
         'active_students' : students,
         'active_teachers' : teachers
     }
     return HttpResponse(template.render(context, request))
+
+def addLessonFromGroup(request,group_pk):
+    group = Group.objects.get(pk = group_pk)
+    print(group.name)
+    students = group.clients.all()
+    teachers = Teacher.objects.all()
+    template = loader.get_template('crm/lesson.html')
+    context = {
+        'name':group.name,
+        'active_students' : students,
+        'active_teachers' : teachers
+    }
+    return HttpResponse(template.render(context, request))    
 
 def lessonSuccess(request):
     print(request.POST)
@@ -153,6 +171,7 @@ def addPayment(request):
     try:
         print(request.POST)
         client = int(request.POST['client'])
+        note = request.POST['note']
         date = datetime.strptime(request.POST['date'],"%Y-%m-%d")
         value = float(request.POST['value'])
     except (KeyError):
@@ -162,6 +181,96 @@ def addPayment(request):
     active_client = Client.objects.get(pk = client)
     p = Payment(client = active_client,
     date = date,
-    value = value)
+    value = value,
+    note = note)
     p.save()
     return HttpResponseRedirect(reverse('CRM_payments', args=()))
+
+#========================================================
+
+def convertSchedule(schedule:str)->list:
+    schedule = json.loads(schedule.replace("\'", "\""))
+    r = []
+    for day,time in schedule.items():
+        r.append(DAYS[int(day)]+" "+time)
+    return r
+
+def CRM_groups(request):
+    groups = Group.objects.all()
+    active_groups = [{
+        'pk':g.pk,
+        'teacher':g.teacher,
+        'name':g.name,
+        'clients':g.clients.all,
+        'schedule':convertSchedule(g.schedule)
+    } for g in groups]
+    template = loader.get_template('crm/simpleGroups.html')
+    context = {
+        'groups' : active_groups,
+    }
+    return HttpResponse(template.render(context, request))
+
+def addGroup(request):
+    clients = Client.objects.all()
+    teachers = Teacher.objects.all()
+    template = loader.get_template('crm/addGroup.html')
+    context = {
+        'clients' : clients,
+        'teachers':teachers
+    }
+    return HttpResponse(template.render(context, request))
+
+def addGroupSuccess(request):
+    print(request.POST)
+    try:
+        name = request.POST['name']
+        print(request.POST.getlist('student'))
+        students = [int(c) for c in request.POST.getlist('student')]
+        print(students)
+        students = Client.objects.filter(pk__in = students)
+        print(students)
+        teacher = Teacher.objects.get(pk = request.POST['teacher'])
+        schedule = {}
+        for day in request.POST.getlist('day'):
+            schedule[day] = request.POST[f"day{day}time"]
+    except:
+        return render(request,'crm/addGroup.html',{
+            'error_message': "You didn't select a choice."
+        })
+    else:
+        print(name)
+        print(students)
+        print(schedule)
+        g = Group(name = name,
+        schedule = str(schedule),
+        teacher = teacher)
+        g.save()
+        g.clients.set(students)
+        g.save()
+        return HttpResponseRedirect(reverse('CRM_groups', args=()))
+
+#========================================================
+def checkTime(schedule)->str:
+    schedule = json.loads(schedule.replace("\'", "\""))
+    today = str(datetime.today().weekday())
+    if today in schedule:
+        return schedule[today]
+    else:
+        return False
+
+def CRM_dashboard(request):
+    groups = Group.objects.all()
+
+    groups = [g for g in groups if checkTime(g.schedule)]
+    active_groups = [{
+        'pk':g.pk,
+        'teacher':g.teacher,
+        'name':g.name,
+        'clients':g.clients.all,
+        'schedule':convertSchedule(g.schedule)
+    } for g in groups]
+    template = loader.get_template('crm/simpleDashboard.html')
+    context = {
+        'groups' : active_groups,
+    }
+    return HttpResponse(template.render(context, request))

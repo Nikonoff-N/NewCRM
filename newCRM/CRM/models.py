@@ -1,5 +1,6 @@
 from django.db import models
-
+def getDefaultTeacher():
+    return Teacher.objects.all()[0].pk
 # Create your models here.
 class Client(models.Model):
     name = models.CharField(max_length=200)
@@ -12,9 +13,9 @@ class Payment(models.Model):
     client = models.ForeignKey(Client,on_delete=models.CASCADE)
     date = models.DateField()
     value = models.FloatField(default=0)
-    
+    note = models.CharField(max_length=200,default="")
     def __str__(self):
-        return f"{self.client.name} : {self.value} - {self.date}"
+        return f"{self.client.name} : {self.value} - {self.date} {self.note}"
 
 class Teacher(models.Model):
     name = models.CharField(max_length=200)
@@ -38,3 +39,11 @@ class Phone(models.Model):
     phone = models.BigIntegerField()
     def __str__(self):
         return f"{self.client}:{self.phone}-{self.note}"
+
+class Group(models.Model):
+    name = models.CharField(max_length=200)
+    clients = models.ManyToManyField(Client)
+    schedule = models.CharField(max_length=200)
+    teacher = models.ForeignKey(Teacher,on_delete=models.PROTECT,default=getDefaultTeacher)
+    def __str__(self):
+        return f"{self.name} : {len(self.clients.all())} учеников"

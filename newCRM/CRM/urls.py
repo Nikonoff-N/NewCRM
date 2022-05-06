@@ -16,8 +16,16 @@ urlpatterns = [
     #=====================================
     path('CRM/lessonsTab',views.CRM_Lessons,name = 'CRM_Lessons'),
     path('CRM/addLesson',views.addLesson,name = 'addLesson'),
+    path('CRM/addLesson/<int:group_pk>',views.addLessonFromGroup,name = 'addLessonFromGroup'),
     path('CRM/lessonSuccess',views.lessonSuccess,name = 'lessonSuccess'),
     #=====================================
     path('CRM/paymentsTab',views.CRM_payments,name = 'CRM_payments'),
     path('CRM/addPayment',views.addPayment,name = 'addPayment'),
+    #===========================================================
+    path('CRM/groupsTab',views.CRM_groups,name = 'CRM_groups'),
+    path('CRM/addGroup',views.addGroup,name = 'addGroup'),
+    path('CRM/addGroupSuccess',views.addGroupSuccess,name = 'addGroupSuccess'),
+    #===========================================================
+    path('CRM/dashboard',views.CRM_dashboard,name = 'dashboard'),
+
 ]

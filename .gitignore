@@ -1,1 +1,3 @@
 djVenv/
+.venv/
+newCRM/newCRM/db.sqlite3

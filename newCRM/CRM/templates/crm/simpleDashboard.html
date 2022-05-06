@@ -24,7 +24,7 @@
                 <td>{{group.name}}<br>{{group.teacher}}</td>
                 <td>
                     {%for s in group.clients.all%}
-                        <a class = "clientTag" href = {%url 'index'%}>{{s.name}}<a><br>
+                        <a class = "clientTag" href = {% url 'client_card' s.pk %}>{{s.name}}<a><br>
                     {%endfor%}
                 </td>
                 <td>

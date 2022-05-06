@@ -274,3 +274,13 @@ def CRM_dashboard(request):
         'groups' : active_groups,
     }
     return HttpResponse(template.render(context, request))
+
+def client_card(request, client_id):
+    client = Client.objects.get(pk=client_id)
+    payments = Payment.objects.filter(client=client)
+    template = loader.get_template('crm/clientCard.html')
+    context = {
+        'client' : client,
+        'payments':payments
+    }
+    return HttpResponse(template.render(context, request))

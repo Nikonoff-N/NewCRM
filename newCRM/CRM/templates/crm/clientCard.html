@@ -10,6 +10,12 @@
     <body>
         <a class = "button" href = {%url 'index' %}>К индексу</a>
         <h3>{{client.name}}</h3>
+        {%for pay in payments%}
+            <p>{{pay.value}}:{{pay.date}}<p>
+        {%endfor%}
+        {%for g in group%}
+            <p>{{g.name}}<p>
+        {%endfor%}        
 
     </body>
 </html>

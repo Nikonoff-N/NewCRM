@@ -54,17 +54,18 @@ def CRM_clients(request):
     else:
         #user = "None"
         return HttpResponseRedirect(reverse('forbiden', args=()))
-    data = [{'name':s.name,
+    data = [{'id':s.pk,
+    'name':s.name,
     'phone':Phone.objects.filter(client = s),
     'money':s.money
     } for s in Client.objects.all()]
     #students = Client.objects.all()
     #contacts = {s:Phone.objects.get(client = s)  for s in students}
-    print(data)
+    #print(data)
     template = loader.get_template('crm/simpleClients.html')
     context = {
         'username' : user,
-        'data':data
+        'data':data,
     }
     return HttpResponse(template.render(context, request))
 
@@ -279,11 +280,14 @@ def client_card(request, client_id):
     client = Client.objects.get(pk=client_id)
     payments = Payment.objects.filter(client=client)
     group = Group.objects.filter(clients=client)
+    phone = Phone.objects.filter(client=client)
+    data = Lesson.objects.filter(clients=client)
     template = loader.get_template('crm/clientCard.html')
     context = {
         'client' : client,
         'payments':payments,
         'group': group,
+        'phone': phone,
+        'lessons': data,
     }
-    print(payments)
     return HttpResponse(template.render(context, request))

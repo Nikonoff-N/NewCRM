@@ -8,14 +8,38 @@
         <link rel="stylesheet" type="text/css" href="{% static 'crm/simpleStyle.css' %}">
     </head>
     <body>
-        <a class = "button" href = {%url 'index' %}>К индексу</a>
+        <a class = "button" href = {% url 'index' %}>К индексу</a>
         <h3>{{client.name}}</h3>
-        {%for pay in payments%}
-            <p>{{pay.value}}:{{pay.date}}<p>
+
+        {% for p in phone %}
+            <p>{{p.note}} {{p.phone}}</p>
+        {% empty %}
+            <p>Номер отсутствует</p>
+        {% endfor %}
+
+        {% for g in group %}
+            <p>Группа: {{g.name}}<p>
+        {% endfor %}  
+        
+        {% for l in lessons %}
+            <p>{{l}}</p>
+        {% endfor %}
+
+        {% for pay in payments %}
+        <table>
+            <tr>
+                <th>Сумма</th>
+                <th>Дата оплаты</th>
+            </tr>
+            
+            <tr>
+                <td>{{pay.value}}</td>
+                <td>{{pay.date}}</td>
+            </tr>
+        </table>
+        {% empty %}
+        <p>Платежи отсутствуют</p>
         {%endfor%}
-        {%for g in group%}
-            <p>{{g.name}}<p>
-        {%endfor%}        
 
     </body>
 </html>

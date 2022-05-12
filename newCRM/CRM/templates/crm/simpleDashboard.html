@@ -8,7 +8,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'crm/simpleStyle.css' %}">
     </head>
     <body>
-        <a class = "button" href = {%url 'index'%}>К индексу</a>
+        <a class = "button" href = {%url 'index' %}>К индексу</a>
         <table>
             <tr>
                 <th colspan = "4">Группы сегодня</th>
@@ -24,16 +24,16 @@
                 <td>{{group.name}}<br>{{group.teacher}}</td>
                 <td>
                     {%for s in group.clients.all%}
-                        <a class = "clientTag" href = {%url 'index'%}>{{s.name}}<a><br>
+                        <a class = "clientTag" href = {% url 'client_card' s.pk %}>{{s.name}}<a><br>
                     {%endfor%}
                 </td>
                 <td>
-                    {%for s in group.schedule%}
+                    {% for s in group.schedule %}
                         {{s}}<br>
                     {%endfor%}
                 </td>
                 <td>
-                    <a class = "button" href = {%url 'addLessonFromGroup' group.pk%}>Создать урок</a>
+                    <a class = "button" href = {%url 'addLessonFromGroup' group.pk %}>Создать урок</a>
                 </td>
             </tr>            
             {%endfor%}

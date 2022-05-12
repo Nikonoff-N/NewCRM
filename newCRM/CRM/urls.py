@@ -27,5 +27,9 @@ urlpatterns = [
     path('CRM/addGroupSuccess',views.addGroupSuccess,name = 'addGroupSuccess'),
     #===========================================================
     path('CRM/dashboard',views.CRM_dashboard,name = 'dashboard'),
-
+    #===========================================================
+    path('CRM/clientCard<int:client_id>',views.client_card, name = 'client_card'),
+    path('CRM/addPhone',views.addPhone, name = 'addPhone'),
+    path('CRM/editName',views.editName, name = 'editName'),
+#     path('CRM/deletePhone',views.deletePhone, name = 'deletePhone'),
 ]

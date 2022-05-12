@@ -41,7 +41,7 @@
                 {%endfor%}
             </td>
             <td>{{student.money}}</td>
-            <td><button >Подробнее</button></td>
+            <td><a href="{% url 'client_card' student.id %}"><button>Подробнее</button></a></td>
         </tr>
         {%endfor%}
     </table>

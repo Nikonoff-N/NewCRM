@@ -8,7 +8,7 @@
     </head>
     <body>
         <a href = "{% url 'index' %}">В начало</a><br>
-        <form action={%url 'lessonSuccess'%} method="post">
+        <form action={%url 'lessonSuccess' %} method="post">
         {% csrf_token %}
         <label for = "name">Название {{name}}</label>
         <input type = "text" name = "name" value = {{name}}><br>        

@@ -10,6 +10,16 @@
     <body>
         <a class = "button" href = {% url 'index' %}>К индексу</a>
         <h3>{{client.name}}</h3>
+        <button onclick="document.getElementById('editName').classList.remove('hidden');">Изменить имя</button>
+        <div id='editName' class="hidden">
+            <form action="{%url 'editName' %}" method="post" class='popup'>
+                {% csrf_token %}
+                
+                <input type = "hidden" name = "client" value = "{{client.pk}}">
+                    <label for = "name">Имя</label><input name = "name" type="text">
+                <input type="submit" value="Изменить имя">
+            </form>
+        </div>
 
         {% for p in phone %}
             <p>{{p.note}} {{p.phone}}</p>
@@ -17,29 +27,83 @@
             <p>Номер отсутствует</p>
         {% endfor %}
 
+        <button onclick="document.getElementById('addPhone').classList.remove('hidden');">Добавить новый телефон</button>
+        <div id='addPhone' class="hidden">
+            <form action="{%url 'addPhone' %}" method="post" class='popup'>
+                {% csrf_token %}
+                
+                <input type = "hidden" name = "client" value = "{{client.pk}}">
+                <table>
+                    <tr><td><label for = "phone">Телефон</label><input name = "phone" type="tel"></td></tr>
+                    <tr><td><label for = "note">Заметка</label><input name = "note" type="text"></td></tr>
+                </table>
+                <input type="submit" value="Добавить телефон">
+            </form>
+        </div>
+
+        {% comment %} <button onclick="document.getElementById('deletePhone').classList.remove('hidden');">Удалить телефон</button>
+        <div id='deletePhone' class="hidden">
+            <form action="{%url 'deletePhone' %}" method="post" class='popup'>
+                {% csrf_token %}
+                
+                <input type = "hidden" name = "client" value = "{{client.pk}}">
+                <select name="phone" id="">
+                    {% for p in phone %}
+                    <option value="{{p.phone}}">{{p.phone}}</option>
+                    {% endfor %}
+                </select>
+                <input type="submit" value="Удалить телефон">
+            </form>
+        </div> {% endcomment %}
+
         {% for g in group %}
             <p>Группа: {{g.name}}<p>
         {% endfor %}  
-        
-        {% for l in lessons %}
-            <p>{{l}}</p>
-        {% endfor %}
 
-        {% for pay in payments %}
         <table>
             <tr>
-                <th>Сумма</th>
                 <th>Дата оплаты</th>
+                <th>Сумма</th>
+                <th>Заметка</th>
             </tr>
-            
+            {% for pay in payments %}
             <tr>
-                <td>{{pay.value}}</td>
                 <td>{{pay.date}}</td>
+                <td>{{pay.value}}</td>
+                <td>{{pay.note}}</td>
             </tr>
+            {%endfor%}
         </table>
-        {% empty %}
-        <p>Платежи отсутствуют</p>
-        {%endfor%}
 
+        <button onclick="document.getElementById('newPayment').classList.remove('hidden');">Добавить новый платёж</button>
+        <div id='newPayment' class="hidden">
+            <form action="{%url 'addPayment' %}" method="post" class='popup'>
+                {% csrf_token %}
+                <input type = "hidden" name = "tag" value = "client">
+                <input type = "hidden" name = "client" value = "{{client.pk}}">
+                <table>
+                        <tr><td><label for = "date">Дата</label><input type = "date" name = "date"></td></tr>
+                        <tr><td><label for = "value">Кол-во</label><input name = "value" type="number" step="0.01"></td></tr>
+                        <tr><td><label for = "note">Заметка</label><input name = "note" type="text"></td></tr>
+                </table>
+                <input type="submit" value="Добавить платёж">
+            </form>
+        </div>
+
+        <table>
+            <tr>
+                <th>Название</th>
+                <th>Дата</th>
+                <th>Цена</th>
+                
+            </tr>
+            {% for lesson in lessons %}
+            <tr>
+                <td>{{lesson.name}}</td>
+                <td>{{lesson.date}}</td>
+                <td>{{lesson.price}}</td>
+            </tr>
+            {% endfor %}
+        </table>
     </body>
 </html>

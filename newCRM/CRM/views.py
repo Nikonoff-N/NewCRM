@@ -171,6 +171,7 @@ def CRM_payments(request):
 def addPayment(request):
     try:
         print(request.POST)
+        tag = request.POST['tag']
         client = int(request.POST['client'])
         note = request.POST['note']
         date = datetime.strptime(request.POST['date'],"%Y-%m-%d")
@@ -185,7 +186,10 @@ def addPayment(request):
     value = value,
     note = note)
     p.save()
-    return HttpResponseRedirect(reverse('CRM_payments', args=()))
+    if tag == "client":
+        return HttpResponseRedirect(reverse('client_card', args=(client,)))
+    else:
+        return HttpResponseRedirect(reverse('CRM_payments', args=()))
 
 #========================================================
 
@@ -291,3 +295,53 @@ def client_card(request, client_id):
         'lessons': data,
     }
     return HttpResponse(template.render(context, request))
+
+def addPhone(request):
+    try:
+        print(request.POST)
+        client = int(request.POST['client'])
+        note = request.POST['note']
+        phone = int(request.POST['phone'])
+    except (KeyError):
+        return render(request,'crm/clientCard.html',{
+            'error_message': "You didn't select a choice."
+        })
+    active_client = Client.objects.get(pk = client)
+    p = Phone(client = active_client,
+    phone = phone,
+    note = note)
+    p.save()
+    return HttpResponseRedirect(reverse('client_card', args=(client,)))
+
+def editName(request):
+    try:
+        client = int(request.POST['client'])
+        name = request.POST['name']
+    except (KeyError):
+        return render(request,'crm/clientCard.html',{
+            'error_message': "You didn't select a choice."
+        })
+    clients = Client.objects.get(pk = client)
+    clients.name = name
+    clients.save()
+    return HttpResponseRedirect(reverse('client_card', args=(client,)))
+
+# def deletePhone(request):
+#     try:
+#         print(request.POST)
+#         client = int(request.POST['client'])
+#         note = request.POST['note']
+#         phone = int(request.POST['phone'])
+#     except (KeyError):
+#         return render(request,'crm/clientCard.html',{
+#             'error_message': "You didn't select a choice."
+#         })
+#     active_client = Client.objects.get(pk = client)
+#     p = Phone(client = active_client,
+#     phone = phone,
+#     note = note)
+#     p.delete()
+#     context = {
+#         'phone': p,
+#     }
+#     return HttpResponseRedirect(reverse('client_card', args=(client, context)))

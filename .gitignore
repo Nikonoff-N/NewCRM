@@ -1,3 +1,5 @@
 djVenv/
 .venv/
-newCRM/db.sqlite3
+db.sqlite3
+dbBackUp.sqlite3
+*.pyc

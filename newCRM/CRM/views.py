@@ -345,3 +345,43 @@ def editName(request):
 #         'phone': p,
 #     }
 #     return HttpResponseRedirect(reverse('client_card', args=(client, context)))
+
+def editLesson(request, lesson_id):
+    lesson = Lesson.objects.get(pk=lesson_id)
+    clients = Client.objects.filter()
+    groups = Group.objects.filter()
+
+
+    context = {
+        'lessons': lesson,
+    }
+
+    template = loader.get_template('crm/editLesson.html')
+
+    return HttpResponse(template.render(context, request))
+
+    
+def editInfoLesson(request):
+    try:
+        date = datetime.strptime(request.POST['date'],"%Y-%m-%d")
+        group = request.POST['group']
+        teacher = request.POST['teacher']
+        price = int(request.POST['price'])
+        clients = request.POST['group']
+    except (KeyError):
+        return render(request,'crm/editInfoLesson.html',{
+            'error_message': "You didn't select a choice."
+        })
+    
+    
+
+    lesson = Lesson(
+        teacher = teacher,
+        group = group,
+        clients = clients,
+        date = date,
+        price = price
+    )
+    print(lesson)
+    # lesson.save()
+    return HttpResponseRedirect(reverse('editInfoLesson', args=()))

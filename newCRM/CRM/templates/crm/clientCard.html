@@ -10,6 +10,7 @@
     <body>
         <a class = "button" href = {% url 'index' %}>К индексу</a>
         <h3>{{client.name}}</h3>
+        
         <button onclick="document.getElementById('editName').classList.remove('hidden');">Изменить имя</button>
         <div id='editName' class="hidden">
             <form action="{%url 'editName' %}" method="post" class='popup'>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="uft-8">
+        <title>Spark! CRM</title>
+        {% load static %}
+        <link rel="icon" type="image/ico" href={% static 'crm/img/favicon.ico' %}>
+    
+        <link rel="stylesheet" type="text/css" href="{% static 'crm/simpleStyle.css' %}">
+    </head>
+    <body>
+        <form action="{%url 'editInfoLesson' %}" method="post" class='popup'>
+            {% csrf_token %}
+            <input type = "hidden" name = "client" value = "{{client.pk}}">
+            <table>
+                <tr><td><label for = "date">Дата</label><input name = "date" type="text" value="{{lessons.date}}"></td></tr>
+                <tr><td><label for = "group">Группа</label><input name = "group" type="text" value="{{lessons.group}}"></td></tr>
+                <tr><td><label for = "teacher">Учитель</label><input name = "teacher" type="text" value="{{lessons.teacher}}"></td></tr>
+                <tr><td><label for = "price">Цена</label><input name = "price" type="text" value="{{lessons.price}}"></td></tr>
+                <tr><td><label for = "clients">Студенты</label>
+                    {% for client in lessons.clients.all %}
+                    <input name = "clients" type="text" value="{{client.name}}">
+                    {% endfor %}
+                    </td>
+                </tr>
+            </table>
+            <input type="submit" value="Редактировать">
+        </form>
+    </body>
+</html>

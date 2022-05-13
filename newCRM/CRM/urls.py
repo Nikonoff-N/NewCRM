@@ -32,4 +32,6 @@ urlpatterns = [
     path('CRM/addPhone',views.addPhone, name = 'addPhone'),
     path('CRM/editName',views.editName, name = 'editName'),
 #     path('CRM/deletePhone',views.deletePhone, name = 'deletePhone'),
+    path('CRM/editLesson<int:lesson_id>',views.editLesson, name = 'editLesson'),
+    path('CRM/editInfoLesson',views.editLesson, name = 'editInfoLesson'),
 ]

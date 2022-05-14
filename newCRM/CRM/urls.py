@@ -32,6 +32,7 @@ urlpatterns = [
     path('CRM/addPhone',views.addPhone, name = 'addPhone'),
     path('CRM/editName',views.editName, name = 'editName'),
 #     path('CRM/deletePhone',views.deletePhone, name = 'deletePhone'),
-    path('CRM/editLesson<int:lesson_id>',views.editLesson, name = 'editLesson'),
-    path('CRM/editInfoLesson',views.editLesson, name = 'editInfoLesson'),
+    path('CRM/editLesson/<int:lesson_id>',views.editLesson, name = 'editLesson'),
+    path('CRM/deleteClient/<int:lesson_id>/<int:client_id>',views.deleteClient, name = 'deleteClient'),
+    path('CRM/editPriceLessons',views.editPriceLessons, name = 'editPriceLessons'),
 ]

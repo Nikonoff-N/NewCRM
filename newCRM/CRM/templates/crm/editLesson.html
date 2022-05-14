@@ -9,22 +9,29 @@
         <link rel="stylesheet" type="text/css" href="{% static 'crm/simpleStyle.css' %}">
     </head>
     <body>
-        <form action="{%url 'editInfoLesson' %}" method="post" class='popup'>
-            {% csrf_token %}
-            <input type = "hidden" name = "client" value = "{{client.pk}}">
-            <table>
-                <tr><td><label for = "date">Дата</label><input name = "date" type="text" value="{{lessons.date}}"></td></tr>
-                <tr><td><label for = "group">Группа</label><input name = "group" type="text" value="{{lessons.group}}"></td></tr>
-                <tr><td><label for = "teacher">Учитель</label><input name = "teacher" type="text" value="{{lessons.teacher}}"></td></tr>
-                <tr><td><label for = "price">Цена</label><input name = "price" type="text" value="{{lessons.price}}"></td></tr>
-                <tr><td><label for = "clients">Студенты</label>
-                    {% for client in lessons.clients.all %}
-                    <input name = "clients" type="text" value="{{client.name}}">
-                    {% endfor %}
-                    </td>
-                </tr>
-            </table>
-            <input type="submit" value="Редактировать">
+        <a class = "button" href = {%url 'index' %}>К индексу</a>
+        <h3>{{lessons.name}}</h3>
+        <p>Дата: {{lessons.date}}</p>
+        <p>Учитель: {{lessons.teacher}}</p>    
+        <p>Цена: {{lessons.price}}</p> 
+        <button onclick="document.getElementById('editPriceLessons').classList.remove('hidden');">Изменить стоимость</button>
+        <div id='editPriceLessons' class="hidden">
+            <form action="{%url 'editPriceLessons' %}" method="post" class='popup'>
+                {% csrf_token %}
+                <input type = "hidden" name = "lesson" value = "{{lessons.pk}}">
+                <table>
+                    <tr><td><label for = "price">Новая цена</label><input name = "price" type="number"></td></tr>
+                </table>
+                <input type="submit" value="Изменить">
+            </form>
+        </div>   
+               
+        <p>Ученики</p>   
+        <ul>
+            {% for client in lessons.clients.all %}
+                <li>{{client.name}} <a class = "button" href="{% url 'deleteClient' lessons.pk client.pk %}">X</a></li>
+            {% endfor %}
+        </ul>       
         </form>
     </body>
 </html>

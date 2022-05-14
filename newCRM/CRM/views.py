@@ -348,10 +348,6 @@ def editName(request):
 
 def editLesson(request, lesson_id):
     lesson = Lesson.objects.get(pk=lesson_id)
-    clients = Client.objects.filter()
-    groups = Group.objects.filter()
-
-
     context = {
         'lessons': lesson,
     }
@@ -361,27 +357,23 @@ def editLesson(request, lesson_id):
     return HttpResponse(template.render(context, request))
 
     
-def editInfoLesson(request):
+def editPriceLessons(request):
     try:
-        date = datetime.strptime(request.POST['date'],"%Y-%m-%d")
-        group = request.POST['group']
-        teacher = request.POST['teacher']
+        lesson = int(request.POST['lesson'])
         price = int(request.POST['price'])
-        clients = request.POST['group']
     except (KeyError):
-        return render(request,'crm/editInfoLesson.html',{
+        return render(request,'crm/editLesson.html',{
             'error_message': "You didn't select a choice."
         })
-    
-    
+    lessons = Lesson.objects.get(pk=lesson)
+    lessons.price = price
+    lessons.save()
+    return HttpResponseRedirect(reverse('editLesson', args=(lesson,)))
 
-    lesson = Lesson(
-        teacher = teacher,
-        group = group,
-        clients = clients,
-        date = date,
-        price = price
-    )
-    print(lesson)
-    # lesson.save()
-    return HttpResponseRedirect(reverse('editInfoLesson', args=()))
+def deleteClient(request, client_id, lesson_id):
+    lesson = Lesson.objects.get(pk=lesson_id)
+    client = Client.objects.get(pk=client_id)
+    lesson.clients.remove(client)
+    lesson.save()
+    return HttpResponseRedirect(reverse('editLesson', args=(lesson_id,)))
+    

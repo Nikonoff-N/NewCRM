@@ -348,10 +348,12 @@ def editName(request):
 
 def editLesson(request, lesson_id):
     lesson = Lesson.objects.get(pk=lesson_id)
+    clients = Client.objects.all()
+    
     context = {
         'lessons': lesson,
+        'clients': clients,
     }
-
     template = loader.get_template('crm/editLesson.html')
 
     return HttpResponse(template.render(context, request))
@@ -377,3 +379,16 @@ def deleteClient(request, client_id, lesson_id):
     lesson.save()
     return HttpResponseRedirect(reverse('editLesson', args=(lesson_id,)))
     
+def addClientToLesson(request):
+    try:
+        client = request.POST['client']
+        lesson = int(request.POST['lesson'])
+    except (KeyError):
+        return render(request,'crm/editLesson.html',{
+            'error_message': "You didn't select a choice."
+        })
+    lesson = Lesson.objects.get(pk = lesson)
+    new_client = Client.objects.get(pk = client)
+    lesson.clients.add(new_client)
+    lesson.save()
+    return HttpResponseRedirect(reverse('editLesson', args=(lesson.pk,)))

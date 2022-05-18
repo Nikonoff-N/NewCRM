@@ -28,11 +28,12 @@ urlpatterns = [
     #===========================================================
     path('CRM/dashboard',views.CRM_dashboard,name = 'dashboard'),
     #===========================================================
-    path('CRM/clientCard<int:client_id>',views.client_card, name = 'client_card'),
+    path('CRM/clientCard/<int:client_id>',views.client_card, name = 'client_card'),
     path('CRM/addPhone',views.addPhone, name = 'addPhone'),
     path('CRM/editName',views.editName, name = 'editName'),
 #     path('CRM/deletePhone',views.deletePhone, name = 'deletePhone'),
     path('CRM/editLesson/<int:lesson_id>',views.editLesson, name = 'editLesson'),
     path('CRM/deleteClient/<int:lesson_id>/<int:client_id>',views.deleteClient, name = 'deleteClient'),
     path('CRM/editPriceLessons',views.editPriceLessons, name = 'editPriceLessons'),
+    path('CRM/addClientToLesson',views.addClientToLesson, name = 'addClientToLesson'),
 ]

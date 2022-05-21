@@ -29,7 +29,7 @@
         <p>Ученики</p>   
         <ul>
             {% for client in lessons.clients.all %}
-                <li>{{client.name}} <a class = "button" href="{% url 'deleteClient' lessons.pk client.pk %}">X</a></li>
+                <li>{{client.name}} <a class = "button" href="{% url 'deleteLessonClient' lessons.pk client.pk %}">X</a></li>
             {% endfor %}
         </ul>
 

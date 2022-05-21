@@ -31,9 +31,15 @@ urlpatterns = [
     path('CRM/clientCard/<int:client_id>',views.client_card, name = 'client_card'),
     path('CRM/addPhone',views.addPhone, name = 'addPhone'),
     path('CRM/editName',views.editName, name = 'editName'),
-#     path('CRM/deletePhone',views.deletePhone, name = 'deletePhone'),
+    #path('CRM/deletePhone',views.deletePhone, name = 'deletePhone'),
+    #===========================================================
     path('CRM/editLesson/<int:lesson_id>',views.editLesson, name = 'editLesson'),
-    path('CRM/deleteClient/<int:lesson_id>/<int:client_id>',views.deleteClient, name = 'deleteClient'),
+    path('CRM/deleteLessonClient/<int:lesson_id>/<int:client_id>',views.deleteLessonClient, name = 'deleteLessonClient'),
     path('CRM/editPriceLessons',views.editPriceLessons, name = 'editPriceLessons'),
     path('CRM/addClientToLesson',views.addClientToLesson, name = 'addClientToLesson'),
+    #===========================================================
+    path('CRM/editGroup/<int:group_id>',views.editGroup, name = 'editGroup'),
+    path('CRM/addClientToGroup',views.addClientToGroup, name = 'addClientToGroup'),
+    path('CRM/deleteGroupClient/<int:group_id>/<int:client_id>',views.deleteGroupClient, name = 'deleteGroupClient'),
+    path('CRM/editGroupData',views.editGroupData, name = 'editGroupData'),
 ]

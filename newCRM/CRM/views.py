@@ -7,6 +7,7 @@ from django.shortcuts import redirect, render
 from datetime import datetime
 import json
 from .models import *
+from functools import reduce
 DAYS = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс']
 
 def index(request):
@@ -348,6 +349,7 @@ def editName(request):
 #     }
 #     return HttpResponseRedirect(reverse('client_card', args=(client, context)))
 
+
 #========================================================
 
 def editLesson(request, lesson_id):
@@ -465,3 +467,43 @@ def editGroupData(request):
         g.save()  
         return HttpResponseRedirect(reverse('editGroup', args=(group,)))
     
+
+def mountlyReport(request):
+    today = datetime.today().month
+    active_lessons = Lesson.objects.filter(
+        date__year='2022',
+        date__month = f"{today}")
+    totalLessonsPeopleCount = sum([l.clients.all().count() for l in active_lessons])
+    totalLessonsMoneyCount = sum([l.clients.all().count()*l.price for l in active_lessons])
+    active_payments = Payment.objects.filter(        
+        date__year='2022',
+        date__month = f"{today}")
+    totalPay = sum([p.value for p in active_payments])
+    totalPayDiff = totalPay-totalLessonsMoneyCount
+    active_clients = Client.objects.filter(money__lte = 0)
+    teacher_data = []
+    for t in Teacher.objects.all():
+        t_lessons = active_lessons.filter(teacher = t)
+        hourCount = sum([l.clients.all().count() for l in t_lessons])
+        data = {'name':t.name,
+        'lessonCount':t_lessons.count,
+        'hourCount':hourCount,
+        'eff':hourCount/t_lessons.count() if t_lessons.count()>0 else 0,
+        'totalPay':sum([l.clients.all().count()*l.price for l in t_lessons]),
+        'payday':sum([l.clients.all().count()*100 for l in t_lessons])
+        }
+        teacher_data.append(data)
+
+    template = loader.get_template('crm/report.html')
+    context = {
+        'totalLessonsCount' : active_lessons.count,
+        'totalLessonsPeopleCount' : totalLessonsPeopleCount,
+        'totalLessonsMoneyCount' : totalLessonsMoneyCount,
+        'totalPayCount' : active_payments.count,
+        'totalPay' : totalPay,
+        'totalPayDiff' : totalPayDiff,
+        'clients' : active_clients,
+        'teacher_data':teacher_data,
+    }
+    return HttpResponse(template.render(context, request))
+

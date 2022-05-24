@@ -42,20 +42,7 @@
             </form>
         </div>
 
-        {% comment %} <button onclick="document.getElementById('deletePhone').classList.remove('hidden');">Удалить телефон</button>
-        <div id='deletePhone' class="hidden">
-            <form action="{%url 'deletePhone' %}" method="post" class='popup'>
-                {% csrf_token %}
-                
-                <input type = "hidden" name = "client" value = "{{client.pk}}">
-                <select name="phone" id="">
-                    {% for p in phone %}
-                    <option value="{{p.phone}}">{{p.phone}}</option>
-                    {% endfor %}
-                </select>
-                <input type="submit" value="Удалить телефон">
-            </form>
-        </div> {% endcomment %}
+        <p>Остаток:{{client.money}}</p>
 
         {% for g in group %}
             <p>Группа: {{g.name}}<p>

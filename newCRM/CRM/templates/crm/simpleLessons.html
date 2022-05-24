@@ -9,8 +9,8 @@
         <link rel="stylesheet" type="text/css" href="{% static 'crm/simpleStyle.css' %}">
     </head>
     <body>
-        <a class = "button" href = {%url 'index'%}>К индексу</a>
-        <a class = "button" href = {%url 'addLesson'%}>Создать урок</a>
+        <a class = "button" href = {%url 'index' %}>К индексу</a>
+        <a class = "button" href = {%url 'addLesson' %}>Создать урок</a>
             <table>
             <tr>
                 <th>Дата</th>
@@ -20,7 +20,7 @@
                 <th>Студенты</th>
                 <th>Кнопочки</th>
             </tr>
-            {%for lesson in lessons%}
+            {%for lesson in lessons %}
                 <tr>
                     <td>{{lesson.date}}</td>
                     <td>{{lesson.name}}</td>
@@ -31,9 +31,13 @@
                         <a class = "clientTag" href = {%url 'client_card' s.pk %}>{{s.name}}</a></br>
                         {%endfor%}
                     </td>
-                    <td>bop</td>
+                    <td>
+                        <a href="{% url 'editLesson' lesson.pk %}"><button>Редактировать</button></a>
+                    </td>
                 </tr>
             {%endfor%}
         </table>
+        
+        
     </body>
 </html>

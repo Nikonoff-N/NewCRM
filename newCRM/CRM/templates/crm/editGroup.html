@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="uft-8">
+        <title>Spark! CRM</title>
+        {% load static %}
+        <link rel="icon" type="image/ico" href={% static 'crm/img/favicon.ico' %}>
+        <link rel="stylesheet" type="text/css" href="{% static 'crm/simpleStyle.css' %}">
+    </head>
+    <body>
+        <a class = "button" href = {%url 'index' %}>К индексу</a>
+        <h3>{{group.name}}</h3>
+        <p>Учитель: {{group.teacher}}</p>
+        <p>Ученики</p> 
+        <ul>
+        {% for client in group.clients.all %}
+                <li>{{client}} <a class = "button" href="{% url 'deleteGroupClient' group.pk client.pk %}">X</a></li>
+        {% endfor %}
+        </ul>
+        <button onclick="document.getElementById('addClientToGroup').classList.remove('hidden');">Добавить ученика</button>
+        <div id='addClientToGroup' class="hidden">
+            <form action="{%url 'addClientToGroup' %}" method="post" class='popup'>
+                {% csrf_token %}
+                <input type = "hidden" name = "group" value = "{{group.pk}}">
+                <label for = "clients">Ученик</label><br>
+                    <select id = "client" name = "client">
+                        {%for client in clients %}
+                            <option value = "{{client.pk}}">{{client.name}}</option>
+                        {%endfor%}
+                    </select>
+                <input type="submit" value="Добавить">
+                
+            </form>
+        </div>
+
+        <p>Расписание</p>
+        {% for s in group.schedule %}
+            {{s}} <br>
+        {% endfor %}
+
+        <button onclick="document.getElementById('editGroupData').classList.remove('hidden');">Изменить время занятий</button>
+        <div id='editGroupData' class="hidden">
+            <form action="{%url 'editGroupData' %}" method="post" class='popup'>
+                {% csrf_token %}
+                <input type = "hidden" name = "group" value = "{{group.pk}}">
+                <h5>Дни</h5>
+                <div>
+                    <input type="checkbox" id="day0" name = "day" value = "0">
+                    <label for = "day0">Понедельник</label>
+                    <input type="time" id="day0time" name="day0time" min="09:00" max="21:00">
+                </div>
+                <br>
+                <div>
+                    <input type="checkbox" id="day1" name = "day" value = "1">
+                    <label for = "day1">Вторник</label>
+                    <input type="time" id="day1time" name="day1time" min="09:00" max="21:00">
+                </div>
+                <br>
+                <div>
+                    <input type="checkbox" id="day2" name = "day" value = "2">
+                    <label for = "day2">Среда</label>
+                    <input type="time" id="day2time" name="day2time" min="09:00" max="21:00">
+                </div>
+                <br>
+                <div>            
+                    <input type="checkbox" id="day3" name = "day" value = "3">
+                    <label for = "day3">Четверг</label>
+                    <input type="time" id="day3time" name="day3time" min="09:00" max="21:00">
+                </div>
+                <br>
+                <div>            
+                    <input type="checkbox" id="day4" name = "day" value = "4">
+                    <label for = "day4">Пятница</label>
+                    <input type="time" id="day4time" name="day4time" min="09:00" max="21:00">
+                </div>
+                <br>
+                <div>            
+                    <input type="checkbox" id="day5" name = "day" value = "5">
+                    <label for = "day5">Суббота</label>                
+                    <input type="time" id="day5time" name="day5time" min="09:00" max="21:00">
+                </div>
+                <br>
+                <div>            
+                    <input type="checkbox" id="day6" name = "day" value = "6">
+                    <label for = "day6">Воскресенье</label>  
+                    <input type="time" id="day6time" name="day6time" min="09:00" max="21:00">
+                </div>
+                <br>                                                                      
+                <input type="submit" value="Изменить">  
+            </form>
+        </div>
+    </body>
+</html>

@@ -281,6 +281,8 @@ def CRM_dashboard(request):
     }
     return HttpResponse(template.render(context, request))
 
+#========================================================
+
 def client_card(request, client_id):
     client = Client.objects.get(pk=client_id)
     payments = Payment.objects.filter(client=client)
@@ -347,6 +349,125 @@ def editName(request):
 #     }
 #     return HttpResponseRedirect(reverse('client_card', args=(client, context)))
 
+
+#========================================================
+
+def editLesson(request, lesson_id):
+    lesson = Lesson.objects.get(pk=lesson_id)
+    clients = Client.objects.all()
+    
+    context = {
+        'lessons': lesson,
+        'clients': clients,
+    }
+    template = loader.get_template('crm/editLesson.html')
+
+    return HttpResponse(template.render(context, request))
+
+    
+def editPriceLessons(request):
+    try:
+        lesson = int(request.POST['lesson'])
+        price = int(request.POST['price'])
+    except (KeyError):
+        return render(request,'crm/editLesson.html',{
+            'error_message': "You didn't select a choice."
+        })
+    lessons = Lesson.objects.get(pk=lesson)
+    lessons.price = price
+    lessons.save()
+    return HttpResponseRedirect(reverse('editLesson', args=(lesson,)))
+
+def deleteLessonClient(request, client_id, lesson_id):
+    client = Client.objects.get(pk=client_id)
+    lesson = Lesson.objects.get(pk=lesson_id)
+    lesson.clients.remove(client)
+    lesson.save()
+    return HttpResponseRedirect(reverse('editLesson', args=(lesson_id,)))
+      
+def addClientToLesson(request):
+    try:
+        client = request.POST['client']
+        lesson = int(request.POST['lesson'])
+    except (KeyError):
+        return render(request,'crm/editLesson.html',{
+            'error_message': "You didn't select a choice."
+        })
+
+    new_client = Client.objects.get(pk = client)
+    lesson = Lesson.objects.get(pk = lesson)
+    lesson.clients.add(new_client)
+    lesson.save()
+    return HttpResponseRedirect(reverse('editLesson', args=(lesson.pk,)))
+        
+    
+
+#========================================================
+
+def editGroup(request, group_id):
+    group = Group.objects.get(pk=group_id)
+
+    active_group = {
+        'pk':group.pk,
+        'teacher':group.teacher,
+        'name':group.name,
+        'clients':group.clients.all,
+        'schedule':convertSchedule(group.schedule)
+    }
+
+    context = {
+        'group': active_group,
+    }
+    template = loader.get_template('crm/editGroup.html')
+
+    return HttpResponse(template.render(context, request))
+
+def addClientToGroup(request):
+    try:
+        client = request.POST['client']
+        group = int(request.POST['group'])
+    except (KeyError):
+        return render(request,'crm/editLesson.html',{
+            'error_message': "You didn't select a choice."
+        })
+    new_client = Client.objects.get(pk = client)
+    group = Group.objects.get(pk = group)
+    group.clients.add(new_client)
+    group.save()
+    return HttpResponseRedirect(reverse('editGroup', args=(group.pk,)))
+    
+
+def deleteGroupClient(request, client_id, group_id):
+    client = Client.objects.get(pk=client_id)    
+    group = Group.objects.get(pk=group_id)
+    group.clients.remove(client)
+    group.save()
+    return HttpResponseRedirect(reverse('editGroup', args=(group_id,)))
+
+def editGroupData(request):
+    try:
+        group = int(request.POST['group'])
+        schedule = {}
+        for day in request.POST.getlist('day'):
+            schedule[day] = request.POST[f"day{day}time"]
+    except:
+        return render(request,'crm/editGroup.html',{
+            'error_message': "You didn't select a choice."
+        })
+    else:
+        print(schedule)
+        if not schedule:
+           return HttpResponseRedirect(reverse('editGroup', args=(group,)))  
+        else:
+            for i in schedule:
+                if schedule[i] is "":
+                    return HttpResponseRedirect(reverse('editGroup', args=(group,)))    
+        g = Group.objects.get(pk=group)
+        g.schedule = str(schedule)
+        g.save()  
+        return HttpResponseRedirect(reverse('editGroup', args=(group,)))
+    
+
 def mountlyReport(request):
     today = datetime.today().month
     active_lessons = Lesson.objects.filter(
@@ -385,3 +506,4 @@ def mountlyReport(request):
         'teacher_data':teacher_data,
     }
     return HttpResponse(template.render(context, request))
+

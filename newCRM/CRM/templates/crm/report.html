@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="uft-8">
+        <title>Spark! CRM</title>
+        {% load static %}
+        <link rel="icon" type="image/ico" href={% static 'crm/img/favicon.ico' %}>
+    
+        <link rel="stylesheet" type="text/css" href="{% static 'crm/simpleStyle.css' %}">
+    </head>
+    <body>
+        <a class = "button" href = {%url 'index'%}>К индексу</a>
+        <a class = "button" href={%url 'refreshClients' %}>Обновить</a>
+        <p>Всего проведено уроков:{{totalLessonsCount}}</p>
+        <p>В человекочасах:{{totalLessonsPeopleCount}}</p>
+        <p>На сумму:{{totalLessonsMoneyCount}}</p>
+        <hr>
+        <p>Всего проведено платежей:{{totalPayCount}}</p>
+        <p>На сумму:{{totalPay}}</p>
+        <p>Разница:{{totalPayDiff}}</p>  
+        <hr>
+        <h3>Должники</h3>   
+        <table>
+            <tr>
+                <th>Имя</th>
+                <th>Телефон</th>
+                <th>Остаток</th>
+                <th>Кнопочки</th>
+            </tr>
+            {%for student in clients%}
+                <tr>
+                    <td>{{student.name}}</td>
+                    <td>{%for phone in student.phone%}
+                        {{phone.note}}-{{phone.phone}}<br>
+                        {%endfor%}
+                    </td>
+                    <td>{{student.money}}</td>
+                    <td><a href="{% url 'client_card' student.id %}"><button>Подробнее</button></a></td>
+                </tr>
+            {%endfor%} 
+        </table>
+        <h3>По учителям</h3> 
+        <table>
+            <tr>
+                <th>Имя</th>
+                <th># Уроков</th>
+                <th># Человекочасов</th>
+                <th># Часовая эффективность(простая)</th>
+                <th># Денег принесено</th>
+                <th># Зарплата</th>
+            </tr>
+            {%for teacher in teacher_data%}
+            <tr>
+                <td>{{teacher.name}}</td>
+                <td>{{teacher.lessonCount}}</td>
+                <td>{{teacher.hourCount}}</td>
+                <td>{{teacher.eff}}</td>
+                <td>{{teacher.totalPay}}</td>
+                <td>{{teacher.payday}}</td>
+            </tr>   
+            {%endfor%} 
+        </table> 
+    </body>
+</html>

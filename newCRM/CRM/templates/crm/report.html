@@ -48,6 +48,7 @@
                 <th># Часовая эффективность(простая)</th>
                 <th># Денег принесено</th>
                 <th># Зарплата</th>
+                <th># Прибыль</th>
             </tr>
             {%for teacher in teacher_data%}
             <tr>
@@ -57,8 +58,26 @@
                 <td>{{teacher.eff}}</td>
                 <td>{{teacher.totalPay}}</td>
                 <td>{{teacher.payday}}</td>
-            </tr>   
+                <td>{{teacher.highroll}}</td>
+            </tr>
+                {%for lesson in teacher.lessonHystory%}
+                <tr>
+                    <td>{{lesson.name}}</td>
+                    <td>{{lesson.date}}</td>
+                    <td>{{lesson.clients.count}}</td>
+                </tr>   
+                {%endfor%}
             {%endfor%} 
+            <tr>
+                <td>Итог</td>
+                <td>Итог</td>
+                <td>Итог</td>
+                <td>Итог</td>
+                <td>Итог</td>
+                <td>Итог</td>
+                <td>{{totalHighRoll}}</td>
+            </tr>
         </table> 
+
     </body>
 </html>

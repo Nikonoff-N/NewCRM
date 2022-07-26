@@ -11,6 +11,27 @@
     <body>
         <a class = "button" href = {%url 'index' %}>К индексу</a>
         <a class = "button" href = {%url 'addLesson' %}>Создать урок</a>
+        
+        <form action="{% url 'CRM_Lessons' %}" method="post">
+            {% csrf_token %}
+            <label for="month">Месяц:</label>
+            <input type="month" id="month" name="month"min="2022-05">
+            <label for="teacher">Учитель:</label>
+            <select id = "teacher" name = "teacher">
+                <option selected="selected" value = "-1">Все</option>
+                {%for teacher in teachers%}
+                    <option value = "{{teacher.pk}}">{{teacher.name}}</option>
+                {%endfor%}
+            </select>
+            <label for="group">Группа:</label>
+            <select id = "group" name = "group">
+                <option selected="selected" value = "-1">Все</option>
+                {%for group in groups%}
+                    <option value = "{{group.pk}}">{{group.name}}{%if group.archive%}(архив){%endif%}</option>
+                {%endfor%}
+            </select>
+            <input type="submit" value="Поиск по фильтру">
+        </form>
             <table>
             <tr>
                 <th>Дата</th>

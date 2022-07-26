@@ -31,17 +31,15 @@
             <th>Имя</th>
             <th>Телефон</th>
             <th>Остаток</th>
-            <th>Кнопочки</th>
         </tr>
         {%for student in data%}
         <tr>
-            <td>{{student.name}}</td>
+            <td><a class = "clientTag" href = {% url 'client_card' student.id %}>{{student.name}}</a></td>
             <td>{%for phone in student.phone%}
                 {{phone.note}}-{{phone.phone}}<br>
                 {%endfor%}
             </td>
             <td>{{student.money}}</td>
-            <td><a href="{% url 'client_card' student.id %}"><button>Подробнее</button></a></td>
         </tr>
         {%endfor%}
         </table>

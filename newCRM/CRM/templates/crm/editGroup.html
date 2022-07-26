@@ -9,15 +9,14 @@
     </head>
     <body>
         <a class = "button" href = {%url 'index' %}>К индексу</a>
+        {% if group.archive %}
+            <p>Архивная группа <a class = "button" href = {%url 'switchGroupArchive' group.pk %}>Вернуть из архива</a></p>
+        {%else%}
+            <a class = "button" href = {%url 'switchGroupArchive' group.pk %}>В архив</a>
+        {%endif%}
         <h3>{{group.name}}</h3>
         <p>Учитель: {{group.teacher}}</p>
-        <p>Ученики</p> 
-        <ul>
-        {% for client in group.clients.all %}
-                <li>{{client}} <a class = "button" href="{% url 'deleteGroupClient' group.pk client.pk %}">X</a></li>
-        {% endfor %}
-        </ul>
-        <button onclick="document.getElementById('addClientToGroup').classList.remove('hidden');">Добавить ученика</button>
+        <h5>Ученики: <button onclick="document.getElementById('addClientToGroup').classList.remove('hidden');">Добавить ученика</button></h5> 
         <div id='addClientToGroup' class="hidden">
             <form action="{%url 'addClientToGroup' %}" method="post" class='popup'>
                 {% csrf_token %}
@@ -29,16 +28,24 @@
                         {%endfor%}
                     </select>
                 <input type="submit" value="Добавить">
-                
             </form>
         </div>
-
-        <p>Расписание</p>
-        {% for s in group.schedule %}
-            {{s}} <br>
+        <ul>
+        {% for client in group.clients.all %}
+                <li><a class = "clientTag" href = {% url 'client_card' client.pk %}>{{client}}<a class = "button" href="{% url 'deleteGroupClient' group.pk client.pk %}">x</a></li>
         {% endfor %}
+        </ul>
+        
 
-        <button onclick="document.getElementById('editGroupData').classList.remove('hidden');">Изменить время занятий</button>
+
+        <h5>Расписание: <button onclick="document.getElementById('editGroupData').classList.remove('hidden');">Изменить время занятий</button></h5>
+        <ul>
+        {% for s in group.schedule %}
+            <li>{{s}}</li>
+        {% endfor %}
+        </ul>
+
+        
         <div id='editGroupData' class="hidden">
             <form action="{%url 'editGroupData' %}" method="post" class='popup'>
                 {% csrf_token %}
@@ -89,5 +96,6 @@
                 <input type="submit" value="Изменить">  
             </form>
         </div>
+
     </body>
 </html>

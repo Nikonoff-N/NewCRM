@@ -11,23 +11,30 @@
         <form action={%url 'lessonSuccess' %} method="post">
         {% csrf_token %}
         <label for = "name">Название {{name}}</label>
-        <input type = "text" name = "name" value = {{name}}><br>        
+        <input type = "text" name = "name" value = {{group.name}}><br>        
             <label for = "teacher">Учитель</label><br>
             <select id = "teacher" name = "teacher">
                 {%for teacher in active_teachers%}
-                    <option value = "{{teacher.pk}}">{{teacher.name}}</option>
+                    <option 
+                    {% if teacher.pk == default_teacher%}
+                    selected="selected"
+                    {%endif%}
+                    value = "{{teacher.pk}}">{{teacher.name}}</option>
                 {%endfor%}
             </select>
             <label for = "price">Цена для ученика</label>
             <select id = "price" name = "price">
                 <option value = "300">300</option>
-                <option value = "350">350</option>
+                <option selected="selected" value = "350">350</option>
                 <option value = "500">500</option>
-            </select>
+            </select><br>
+            <input type = "hidden" id = "group" name = "group" value = {{group.pk}}>
+
             <hr>
+
             <h5>Клиенты</h5>
             {% for student in active_students %}
-                <input type="checkbox" id="student{{student.pk}}" name = "student{{student.pk}}" value = "student{{student.pk}}">
+                <input checked type="checkbox" id="student{{student.pk}}" name = "student{{student.pk}}" value = "student{{student.pk}}">
                 <label for = "student{{student.pk}}">{{student.name}}</label><br>
             {% endfor %}
             <hr>

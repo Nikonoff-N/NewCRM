@@ -3,3 +3,4 @@ djVenv/
 db.sqlite3
 dbBackUp.sqlite3
 *.pyc
+pass.txt

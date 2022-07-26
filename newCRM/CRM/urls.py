@@ -29,6 +29,7 @@ urlpatterns = [
     path('CRM/dashboard',views.CRM_dashboard,name = 'dashboard'),
     #===========================================================
     path('CRM/clientCard/<int:client_id>',views.client_card, name = 'client_card'),
+    path('CRM/clientCard/<int:client_id>/<str:error_message>',views.client_card, name = 'client_card'),
     path('CRM/addPhone',views.addPhone, name = 'addPhone'),
     path('CRM/editName',views.editName, name = 'editName'),
     #===========================================================
@@ -38,9 +39,12 @@ urlpatterns = [
     path('CRM/addClientToLesson',views.addClientToLesson, name = 'addClientToLesson'),
     #===========================================================
     path('CRM/editGroup/<int:group_id>',views.editGroup, name = 'editGroup'),
+    path('CRM/switchArchive/<int:group_id>',views.switch_archive_group, name = 'switchGroupArchive'),
     path('CRM/addClientToGroup',views.addClientToGroup, name = 'addClientToGroup'),
     path('CRM/deleteGroupClient/<int:group_id>/<int:client_id>',views.deleteGroupClient, name = 'deleteGroupClient'),
     path('CRM/editGroupData',views.editGroupData, name = 'editGroupData'),
     #===========================================================
     path('CRM/mountlyReport',views.mountlyReport,name = 'mountlyReport'),
+    #==================================================================
+    path('CRM/teachersDashbord',views.teachersDashbord,name = 'teachersDashbord'),
 ]

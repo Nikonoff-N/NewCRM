@@ -1,0 +1,55 @@
+<html>
+
+<head>
+    <meta charset="uft-8">
+    <title>Spark! CRM</title>
+    {% load static %}
+    <link rel="icon" type="image/ico" href={% static 'crm/img/favicon.ico' %}>
+    <link rel="stylesheet" type="text/css" href="{% static 'crm/simpleStyle.css' %}">
+</head>
+
+<body>
+<p>Привет, это индекс! Вы вошли как {{username}}</p><a class = "button" href = "{% url 'logoutView' %}">Выйти</a>
+<a class = "button" href = "{%url 'dashboard' %}">Dashboard</a>
+<a class = "button" href = "{%url 'CRM_clients' %}">Клиенты</a>
+<a class = "button" href = "{%url 'CRM_Lessons' %}">Уроки</a>
+<a class = "button" href = "{%url 'CRM_groups' %}">Группы</a>
+{% comment %} <table>
+    <tr>
+        <th colspan = "4">Группы сегодня</th>
+    </tr>
+    <tr>
+        <th>Имя</th>
+        <th>Ученики</th>
+        <th>Расписание</th>
+        <th>Кнопочки</th>
+    </tr>
+    {%for group in groups%}
+    <tr>
+        <td>{{group.name}}<br>{{group.teacher}}</td>
+        <td>
+            {%for s in group.clients.all%}
+                <a class = "clientTag" href = {% url 'client_card' s.pk %}>{{s.name}}<a><br>
+            {%endfor%}
+        </td>
+        <td>
+            {% for s in group.schedule %}
+                {{s}}<br>
+            {%endfor%}
+        </td>
+        <td>
+            <a class = "button" href = {%url 'addLessonFromGroup' group.pk %}>Создать урок</a>
+        </td>
+    </tr>            
+    {%endfor%}
+</table> {% endcomment %}
+<!--
+    <table>
+    <tr>
+        <td></td>
+        <td></td>
+    </tr>
+</table>-->
+</body>
+
+</html>

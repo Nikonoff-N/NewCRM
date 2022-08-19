@@ -11,6 +11,11 @@
     <body>
         <a class = "button" href = {%url 'index'%}>К индексу</a>
         <a class = "button" href={%url 'refreshClients' %}>Обновить</a>
+        <form action="{% url 'mountlyReport' %}" method="post">
+            {% csrf_token %}
+            <input type="month" id="month" name="month"min="2022-05">
+            <input type="submit" value="Поиск по месяцу">
+        </form>
         <p>Всего проведено уроков:{{totalLessonsCount}}</p>
         <p>В человекочасах:{{totalLessonsPeopleCount}}</p>
         <p>На сумму:{{totalLessonsMoneyCount}}</p>

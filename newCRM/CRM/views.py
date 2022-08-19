@@ -84,7 +84,7 @@ def refreshClients(request):
         credit = sum([l.price for l in lessons])
         payments = Payment.objects.filter(client = c)
         debet= sum([p.value for p in payments])
-        print(c,lessons,payments)
+        #print(c,lessons,payments)
         c.money = debet-credit
         c.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -569,7 +569,10 @@ def switch_archive_group(request,group_id):
 @user_passes_test(lambda u: u.groups.filter(name='admin').exists(),login_url='teachersDashbord')
 def mountlyReport(request):
     pay = 130
-    today = datetime.today().month
+    if 'month' in request.POST:
+        today = int(request.POST['month'][-2::])
+    else:
+        today = datetime.today().month
     active_lessons = Lesson.objects.filter(
         date__year=2022,
         date__month = today)

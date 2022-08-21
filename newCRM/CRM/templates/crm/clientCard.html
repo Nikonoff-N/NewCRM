@@ -1,97 +1,127 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="uft-8">
-        <title>Spark! CRM</title>
-        {% load static %}
-        <link rel="icon" type="image/ico" href={% static 'crm/img/favicon.ico' %}>
-        <link rel="stylesheet" type="text/css" href="{% static 'crm/simpleStyle.css' %}">
-    </head>
-    <body>
-        <a class = "button" href = {% url 'index' %}>К индексу</a>
-        <h3>{{client.name}}</h3>
-        {% if error_message%}<h5>{{error_message}}</h5>{% endif %}
-        <button onclick="document.getElementById('editName').classList.remove('hidden');">Изменить имя</button>
-        <div id='editName' class="hidden">
-            <form action="{%url 'editName' %}" method="post" class='popup'>
-                {% csrf_token %}
+{% extends "crm/base.html" %}
+{% block title %}Index{% endblock %}
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h3>{{client.name}}</h3>
                 
-                <input type = "hidden" name = "client" value = "{{client.pk}}">
-                    <label for = "name">Имя</label><input name = "name" type="text">
-                <input type="submit" value="Изменить имя">
-            </form>
+                {% for p in phone %}
+
+                    <p>{{p.note}} - {{p.phone}}</p>
+                {% empty %}
+                    <p>Номер отсутствует</p>
+                {% endfor %}
+
+                <p>Остаток:{{client.money}}</p>
+        
+                {% for g in group %}
+                    <p>Группа: {{g.name}}<p>
+                {% endfor %}  
+            </div>
         </div>
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-secondary rounded h-100 p-4">
+                <form action="{%url 'editName' %}" method="post" class='popup'>
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        <input type = "hidden" name = "client" value = "{{client.pk}}">
+                        <label for = "name" class="col-sm-2 col-form-label">Новое имя</label>
+                        <div class="col-sm-6">
+                            <input name = "name" type="text" class="form-control">
+                        </div>    
 
-        {% for p in phone %}
-            <p>{{p.note}} {{p.phone}}</p>
-        {% empty %}
-            <p>Номер отсутствует</p>
-        {% endfor %}
+                        <div class="col-sm-4"> 
+                            <button type="submit" class="btn btn-primary"> Изменить имя</button>
+                        </div> 
+                    </div> 
+                </form>
 
-        <button onclick="document.getElementById('addPhone').classList.remove('hidden');">Добавить новый телефон</button>
-        <div id='addPhone' class="hidden">
-            <form action="{%url 'addPhone' %}" method="post" class='popup'>
-                {% csrf_token %}
-                
-                <input type = "hidden" name = "client" value = "{{client.pk}}">
-                <table>
-                    <tr><td><label for = "phone">Телефон</label><input name = "phone" type="tel"></td></tr>
-                    <tr><td><label for = "note">Заметка</label><input name = "note" type="text"></td></tr>
+                <form action="{%url 'addPhone' %}" method="post" class='popup'>
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        <input type = "hidden" name = "client" value = "{{client.pk}}">
+                        <label for = "phone" class="col-sm-2 col-form-label">Телефон</label>
+                        <div class="col-sm-6">
+                            <input name = "phone" type="tel" class="form-control">
+                        </div>  
+                    </div>
+                    <div class="row mb-3">
+                        <label for = "note" class="col-sm-2 col-form-label">Заметка</label>
+                        <div class="col-sm-6">
+                            <input name = "note" type="text" class="form-control">
+                        </div>  
+                    </div>    
+                    <div class="col-sm-4"> 
+                        <button type="submit" class="btn btn-primary">Добавить телефон</button>
+                    </div>                 
+                </form>
+
+            </div>
+        </div>
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-secondary rounded h-100 p-4">
+                <table class = "table">
+                    <tr>
+                        <th>Дата оплаты</th>
+                        <th>Сумма</th>
+                        <th>Заметка</th>
+                    </tr>
+                    {% for pay in payments %}
+                    <tr>
+                        <td>{{pay.date}}</td>
+                        <td>{{pay.value}}</td>
+                        <td>{{pay.note}}</td>
+                    </tr>
+                    {%endfor%}
                 </table>
-                <input type="submit" value="Добавить телефон">
-            </form>
+            </div>
         </div>
-
-        <p>Остаток:{{client.money}}</p>
-
-        {% for g in group %}
-            <p>Группа: {{g.name}}<p>
-        {% endfor %}  
-
-        <table>
-            <tr>
-                <th>Дата оплаты</th>
-                <th>Сумма</th>
-                <th>Заметка</th>
-            </tr>
-            {% for pay in payments %}
-            <tr>
-                <td>{{pay.date}}</td>
-                <td>{{pay.value}}</td>
-                <td>{{pay.note}}</td>
-            </tr>
-            {%endfor%}
-        </table>
-
-        <button onclick="document.getElementById('newPayment').classList.remove('hidden');">Добавить новый платёж</button>
-        <div id='newPayment' class="hidden">
-            <form action="{%url 'addPayment' %}" method="post" class='popup'>
-                {% csrf_token %}
-                <input type = "hidden" name = "tag" value = "client">
-                <input type = "hidden" name = "client" value = "{{client.pk}}">
-                <table>
-                        <tr><td><label for = "date">Дата</label><input type = "date" name = "date"></td></tr>
-                        <tr><td><label for = "value">Кол-во</label><input name = "value" type="number" step="0.01"></td></tr>
-                        <tr><td><label for = "note">Заметка</label><input name = "note" type="text"></td></tr>
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-secondary rounded h-100 p-4">
+                    <form action="{%url 'addPayment' %}" method="post" class='popup'>
+                        {% csrf_token %}
+                        <input type = "hidden" name = "tag" value = "client">
+                        <input type = "hidden" name = "client" value = "{{client.pk}}">
+                        <div class="row mb-3">
+                            <label for = "date" class="col-sm-1 col-form-label">Дата</label>
+                            <div class="col-sm-4">
+                                <input type = "date" name = "date" class="form-control">
+                            </div>       
+                            <label for = "value" class="col-sm-1 col-form-label">Кол-во</label>
+                            <div class="col-sm-4">
+                                <input name = "value" type="number" step="0.01" class="form-control">
+                            </div>    
+                        </div>
+                        <div class="row mb-3">
+                            <label for = "note" class="col-sm-1 col-form-label">Заметка</label>
+                            <div class="col-sm-4">
+                                <input name = "note" type="text" class="form-control">
+                            </div> 
+                            <div class="col-sm-4"> 
+                                <button type="submit" class="btn btn-primary">Добавить платёж</button>
+                            </div> 
+                        </div>    
+                    </form>
+        
+                <table class = "table">
+                    <tr>
+                        <th>Название</th>
+                        <th>Дата</th>
+                        <th>Цена</th>
+                        
+                    </tr>
+                    {% for lesson in lessons %}
+                    <tr>
+                        <td>{{lesson.name}}</td>
+                        <td>{{lesson.date}}</td>
+                        <td>{{lesson.price}}</td>
+                    </tr>
+                    {% endfor %}
                 </table>
-                <input type="submit" value="Добавить платёж">
-            </form>
+            </div>
         </div>
-
-        <table>
-            <tr>
-                <th>Название</th>
-                <th>Дата</th>
-                <th>Цена</th>
-                
-            </tr>
-            {% for lesson in lessons %}
-            <tr>
-                <td>{{lesson.name}}</td>
-                <td>{{lesson.date}}</td>
-                <td>{{lesson.price}}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    </body>
-</html>
+    </div>
+</div>
+{% endblock %}

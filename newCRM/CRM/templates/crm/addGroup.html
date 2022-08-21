@@ -1,76 +1,97 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="uft-8">
-        <title>Добавить группу</title>
-        {% load static %}
-        <link rel="stylesheet" type="text/css" href="{% static 'crm/simpleStyle.css' %}">
-    </head>
-    <body>
-        <a href = "{% url 'index' %}">В начало</a><br>
-        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% extends "crm/base.html" %}
+{% block title %}Index{% endblock %}
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
         <form action="{% url 'addGroupSuccess' %}" method="post">
-        {% csrf_token %}
-            <label for = "name">Название группы</label><br>
-            <input type = "text" name = "name" id = "name" value = ""><br>
-
-            <label for = "teacher">Учитель</label><br>
-            <select id = "teacher" name = "teacher">
-                {%for teacher in teachers%}
-                    <option value = "{{teacher.pk}}">{{teacher.name}}</option>
-                {%endfor%}
-            </select>
-            <hr>
-            <h5>Клиенты</h5> 
-            {% for c in clients %}
-                <input type="checkbox" id="{{c.name}}" name = "student" value = "{{c.pk}}">
-                <label for = "{{c.name}}">{{c.name}}</label><br>
-            {% endfor %}
-            <h5>Дни</h5>
-            <div>
-                <input type="checkbox" id="day0" name = "day" value = "0">
-                <label for = "day0">Понедельник</label>
-                <input type="time" id="day0time" name="day0time" min="09:00" max="21:00">
+            <div class="col-sm-12 col-xl-12">
+                <div class="bg-secondary rounded h-100 p-4">
+                    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+                    
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        <label for = "name" class="col-sm-2 col-form-label">Название группы</label>
+                        <div class="col-sm-2">
+                            <input class="form-control" type = "text" name = "name" id = "name" value = "">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for = "teacher">Учитель</label><br>
+                        <div class="col-sm-2">
+                            <select class="form-select form-select-sm mb-3" id = "teacher" name = "teacher">
+                                {%for teacher in teachers%}
+                                    <option value = "{{teacher.pk}}">{{teacher.name}}</option>
+                                {%endfor%}
+                            </select>
+                        </div>
+                    </div> 
+                </div>
+            </div>     
+            <div class="col-sm-12 col-xl-12">
+                <div class="bg-secondary rounded h-100 p-4">         
+                    <div class="row mb-3">
+                        <legend class="col-form-label col-sm-2 pt-0">Клиенты</legend>
+                        <div class="col-sm-10">
+                            {% for c in clients %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="{{c.name}}" name = "student" value = "{{c.pk}}">
+                                    <label class="form-check-label" for = "{{c.name}}">{{c.name}}</label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>     
+            <div class="col-sm-12 col-xl-12">
+                <div class="bg-secondary rounded h-100 p-4">                  
+                <h5>Дни</h5>
+                <div>
+                    <input class="form-check-input" type="checkbox" id="day0" name = "day" value = "0">
+                    <label for = "day0">Понедельник</label>
+                    <input  type="time" id="day0time" name="day0time" min="09:00" max="21:00">
+                </div>
+                <br>
+                <div>
+                    <input class="form-check-input" type="checkbox" id="day1" name = "day" value = "1">
+                    <label for = "day1">Вторник</label>
+                    <input  type="time" id="day1time" name="day1time" min="09:00" max="21:00">
+                </div>
+                <br>
+                <div>
+                    <input class="form-check-input" type="checkbox" id="day2" name = "day" value = "2">
+                    <label for = "day2">Среда</label>
+                    <input  type="time" id="day2time" name="day2time" min="09:00" max="21:00">
+                </div>
+                <br>
+                <div>            
+                    <input class="form-check-input" type="checkbox" id="day3" name = "day" value = "3">
+                    <label for = "day3">Четверг</label>
+                    <input type="time" id="day3time" name="day3time" min="09:00" max="21:00">
+                </div>
+                <br>
+                <div>            
+                    <input class="form-check-input" type="checkbox" id="day4" name = "day" value = "4">
+                    <label for = "day4">Пятница</label>
+                    <input  type="time" id="day4time" name="day4time" min="09:00" max="21:00">
+                </div>
+                <br>
+                <div>            
+                    <input class="form-check-input" type="checkbox" id="day5" name = "day" value = "5">
+                    <label for = "day5">Суббота</label>                
+                    <input  type="time" id="day5time" name="day5time" min="09:00" max="21:00">
+                </div>
+                <br>
+                <div>            
+                    <input class="form-check-input" type="checkbox" id="day6" name = "day" value = "6">
+                    <label for = "day6">Воскресенье</label>  
+                    <input  type="time" id="day6time" name="day6time" min="09:00" max="21:00">
+                </div>
+                <br>                                                                      
+                <input type = "submit" value = "Добавить группу">
             </div>
-            <br>
-            <div>
-                <input type="checkbox" id="day1" name = "day" value = "1">
-                <label for = "day1">Вторник</label>
-                <input type="time" id="day1time" name="day1time" min="09:00" max="21:00">
-            </div>
-            <br>
-            <div>
-                <input type="checkbox" id="day2" name = "day" value = "2">
-                <label for = "day2">Среда</label>
-                <input type="time" id="day2time" name="day2time" min="09:00" max="21:00">
-            </div>
-            <br>
-            <div>            
-                <input type="checkbox" id="day3" name = "day" value = "3">
-                <label for = "day3">Четверг</label>
-                <input type="time" id="day3time" name="day3time" min="09:00" max="21:00">
-            </div>
-            <br>
-            <div>            
-                <input type="checkbox" id="day4" name = "day" value = "4">
-                <label for = "day4">Пятница</label>
-                <input type="time" id="day4time" name="day4time" min="09:00" max="21:00">
-            </div>
-            <br>
-            <div>            
-                <input type="checkbox" id="day5" name = "day" value = "5">
-                <label for = "day5">Суббота</label>                
-                <input type="time" id="day5time" name="day5time" min="09:00" max="21:00">
-            </div>
-            <br>
-            <div>            
-                <input type="checkbox" id="day6" name = "day" value = "6">
-                <label for = "day6">Воскресенье</label>  
-                <input type="time" id="day6time" name="day6time" min="09:00" max="21:00">
-            </div>
-            <br>                                                                      
-            <input type = "submit" value = "Добавить группу">
-
+        </div>
+            
         </form>
-    </body>
-</html>
+    </div>
+</div>
+{% endblock %}

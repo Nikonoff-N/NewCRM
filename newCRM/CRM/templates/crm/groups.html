@@ -1,0 +1,73 @@
+{% extends "crm/base.html" %}
+{% block title %}Index{% endblock %}
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-12">
+            <div class="bg-secondary rounded h-100 p-4">
+        <a class="btn btn-primary" href = {%url 'addGroup'%}>Новая группа</a>
+    </div>
+</div>
+<div class="col-sm-12 col-xl-12">
+    <div class="bg-secondary rounded h-100 p-4">
+        <h2>Активные группы</h2>
+        <table class="table">
+            <tr>
+                <th>Имя</th>
+                <th>Ученики</th>
+                <th>Расписание</th>
+                <th>Кнопочки</th>
+            </tr>
+            {%for group in groups%}
+            <tr>
+                <td><a class = "btn btn-outline-primary m-2"  href = {% url 'editGroup' group.pk %}>{{group.name}}<br>{{group.teacher}}</a></td>
+                <td>
+                    {%for s in group.clients%}
+                        <a class = "btn btn-outline-primary m-2" href = {%url 'client_card' s.pk%}>{{s.name}}<a><br>
+                    {%endfor%}
+                </td>
+                <td>
+                    {%for s in group.schedule%}
+                        {{s}}<br>
+                    {%endfor%}
+                </td>
+                <td>
+                    <a class = "btn btn-primary m-2" href = {%url 'addLessonFromGroup' group.pk%}>Создать урок</a>
+                </td>
+            </tr>            
+            {%endfor%}
+        </table>
+    </div>
+</div>
+<div class="col-sm-12 col-xl-12">
+    <div class="bg-secondary rounded h-100 p-4">
+        <h2>Архивные группы</h2>
+        <table class="table">
+            <tr>
+                <th>Имя</th>
+                <th>Ученики</th>
+                <th>Расписание</th>
+                <th>Кнопочки</th>
+            </tr>
+            {%for group in archive%}
+            <tr>
+                <td><a class = "btn btn-outline-primary m-2" href = {% url 'editGroup' group.pk %}>{{group.name}}<br>{{group.teacher}}</a></td>
+                <td>
+                    {%for s in group.clients%}
+                        <a class = "btn btn-outline-primary m-2" href = {%url 'client_card' s.pk%}>{{s.name}}<a><br>
+                    {%endfor%}
+                </td>
+                <td>
+                    {%for s in group.schedule%}
+                        {{s}}<br>
+                    {%endfor%}
+                </td>
+                <td>
+                    <a class = "btn btn-primary m-2" href = {%url 'addLessonFromGroup' group.pk%}>Создать урок</a>
+                </td>
+            </tr>            
+            {%endfor%}
+        </table>
+    </div>
+</div>
+{% endblock %}

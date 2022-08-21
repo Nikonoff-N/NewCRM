@@ -1,5 +1,3 @@
-
-from msilib.schema import Error
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.template import loader
@@ -8,7 +6,6 @@ from django.shortcuts import redirect, render
 from datetime import datetime
 import json
 from .models import *
-from functools import reduce
 from django.contrib.auth.decorators import login_required, user_passes_test
 DAYS = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс']
 
@@ -17,16 +14,14 @@ def is_teacher(user):
     return user.groups.filter(name='Teacher').exists()
 
 @login_required
-@user_passes_test(lambda u: u.groups.filter(name='admin').exists(),login_url='teachersDashbord')
+#@user_passes_test(lambda u: u.groups.filter(name='admin').exists(),login_url='teachersDashbord')
 def index(request):
     if request.user.is_authenticated:
         username = request.user.username
     else:
         #user = "None"
         return HttpResponseRedirect(reverse('forbiden', args=()))
-    template = loader.get_template('crm/index.html')
-    context = {"username":username}
-    return HttpResponse(template.render(context, request))
+    return HttpResponseRedirect(reverse('dashboard', args=()))
 
 def loginView(request):
     template = loader.get_template('crm/login.html')
@@ -70,12 +65,13 @@ def CRM_clients(request):
     #students = Client.objects.all()
     #contacts = {s:Phone.objects.get(client = s)  for s in students}
     #print(data)
-    template = loader.get_template('crm/simpleClients.html')
+    template = loader.get_template('crm/clients.html')
     context = {
         'username' : user,
         'data':data,
     }
     return HttpResponse(template.render(context, request))
+
 @login_required
 def refreshClients(request):
     clients= Client.objects.all()
@@ -131,7 +127,7 @@ def CRM_Lessons(request):
     data = data.order_by('-date')
     groups = Group.objects.all().order_by('archive')
     teachers = Teacher.objects.all()
-    template = loader.get_template('crm/simpleLessons.html')
+    template = loader.get_template('crm/lessons.html')
     
 
     context = {
@@ -195,7 +191,7 @@ def lessonSuccess(request):
 def CRM_payments(request):
     payments = Payment.objects.order_by('-date')
     clients = Client.objects.all()
-    template = loader.get_template('crm/simplePayments.html')
+    template = loader.get_template('crm/payments.html')
     context = {
         'payments' : payments,
         'clients' : clients
@@ -251,7 +247,7 @@ def CRM_groups(request):
         'clients':g.clients.all,
         'schedule':convertSchedule(g.schedule)
     } for g in groups]
-    template = loader.get_template('crm/simpleGroups.html')
+    template = loader.get_template('crm/groups.html')
     context = {
         'groups' : active_groups,
         'archive' : archive_group,
@@ -336,7 +332,7 @@ def CRM_dashboard(request):
         'clients':g.clients.all,
         'schedule':convertSchedule(g.schedule)
     } for g in groups]    
-    template = loader.get_template('crm/simpleDashboard.html')
+    template = loader.get_template('crm/dashboard.html')
     context = {
         'groups' : active_groups,
         'clients' : data,
@@ -603,7 +599,7 @@ def mountlyReport(request):
         }
         teacher_data.append(data)
 
-    
+    teacher_data.sort(key = lambda x : -x['hourCount'])
     template = loader.get_template('crm/report.html')
     context = {
         'totalLessonsCount' : active_lessons.count,

@@ -1,47 +1,65 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="uft-8">
-        <title>Добавить урок</title>
-        {% load static %}
-        <link rel="stylesheet" type="text/css" href="{% static 'crm/styles.css' %}">
-    </head>
-    <body>
-        <a href = "{% url 'index' %}">В начало</a><br>
-        <form action={%url 'lessonSuccess' %} method="post">
-        {% csrf_token %}
-        <label for = "name">Название {{name}}</label>
-        <input type = "text" name = "name" value = {{group.name}}><br>        
-            <label for = "teacher">Учитель</label><br>
-            <select id = "teacher" name = "teacher">
-                {%for teacher in active_teachers%}
-                    <option 
-                    {% if teacher.pk == default_teacher%}
-                    selected="selected"
-                    {%endif%}
-                    value = "{{teacher.pk}}">{{teacher.name}}</option>
-                {%endfor%}
-            </select>
-            <label for = "price">Цена для ученика</label>
-            <select id = "price" name = "price">
-                <option value = "300">300</option>
-                <option selected="selected" value = "350">350</option>
-                <option value = "500">500</option>
-            </select><br>
-            <input type = "hidden" id = "group" name = "group" value = {{group.pk}}>
+{% extends "crm/base.html" %}
+{% block title %}Index{% endblock %}
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-12">
+            <div class="bg-secondary rounded h-100 p-4">
+                <form action={%url 'lessonSuccess' %} method="post">
+                    {% csrf_token %}
+                    <input type = "hidden" id = "group" name = "group" value = {{group.pk}}>
+                    <div class="row mb-3">
+                        <label for = "name" class="col-sm-1 col-form-label">Название</label>
+                        <div class="col-sm-2">
+                            <input type = "text" name = "name" value = {{group.name}} class="form-control">
+                        </div>
+                        <label for = "teacher" class="col-sm-1 col-form-label">Учитель</label>
+                        <div class="col-sm-2">
+                            <select id = "teacher" name = "teacher" class="form-select form-select-sm mb-3">
+                                {%for teacher in active_teachers%}
+                                    <option 
+                                    {% if teacher.pk == default_teacher%}
+                                    selected="selected"
+                                    {%endif%}
+                                    value = "{{teacher.pk}}">{{teacher.name}}</option>
+                                {%endfor%}
+                            </select>
+                        </div>  
+                        <label for = "price" class="col-sm-1 col-form-label">Цена для ученика</label>
+                        <div class="col-sm-2">
+                            <select id = "price" name = "price" class="form-select form-select-sm mb-3">
+                                <option value = "300">300</option>
+                                <option selected="selected" value = "350">350</option>
+                                <option value = "500">500</option>
+                            </select>
+                        </div>    
+                    </div>
+                    <div class="row mb-3">
+                        <legend class="col-form-label col-sm-2 pt-0">Клиенты</legend>
+                        <div class="col-sm-10">
+                        {% for student in active_students %}
+                            <div class="form-check">
+                                <input checked class="form-check-input" type="checkbox" id="student{{student.pk}}" name = "student{{student.pk}}" value = "student{{student.pk}}">
+                                <label class="form-check-label" for = "student{{student.pk}}">
+                                    {{student.name}}
+                                </label>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for = "date" class="col-sm-1 col-form-label">Дата</label>
+                        <div class="col-sm-2">
+                            <input type = "date" name = "date"  class="form-control">
+                        </div>
+                        <div class="col-sm-2"> 
+                            <button type="submit" class="btn btn-primary">Добавить урок</button>
+                        </div> 
+                    </div>
+                    </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
 
-            <hr>
-
-            <h5>Клиенты</h5>
-            {% for student in active_students %}
-                <input checked type="checkbox" id="student{{student.pk}}" name = "student{{student.pk}}" value = "student{{student.pk}}">
-                <label for = "student{{student.pk}}">{{student.name}}</label><br>
-            {% endfor %}
-            <hr>
-            <label for = "date">Дата</label><br>
-            <input type = "date" name = "date">
-            <br>
-            <input type = "submit" value = "Добавить урок">
-        </form>
-    </body>
-</html>

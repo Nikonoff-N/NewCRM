@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="uft-8">
-    <title>Spark! CRM</title>
-    {% load static %}
-    <link rel="icon" type="image/ico" href={% static 'crm/img/favicon.ico' %}>
-    <link rel="stylesheet" type="text/css" href="{% static 'crm/simpleStyle.css' %}">
-</head>
-
-<body>
+{% extends "crm/base.html" %}
+{% block title %}Index{% endblock %}
+{% block content %}
 <p>Привет, это индекс! Вы вошли как {{username}}</p><a class = "button" href = "{% url 'logoutView' %}">Выйти</a>
 <a class = "button" href = "{%url 'dashboard' %}">Dashboard</a>
 <a class = "button" href = "{%url 'CRM_clients' %}">Клиенты</a>
@@ -17,6 +8,4 @@
 <a class = "button" href = "{%url 'CRM_payments' %}">Платежи</a>
 <a class = "button" href = "{%url 'CRM_groups' %}">Группы</a>
 <a class = "button" href = "{%url 'mountlyReport' %}">Отчет</a>
-</body>
-
-</html>
+{% endblock %}

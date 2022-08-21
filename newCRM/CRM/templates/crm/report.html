@@ -1,88 +1,105 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="uft-8">
-        <title>Spark! CRM</title>
-        {% load static %}
-        <link rel="icon" type="image/ico" href={% static 'crm/img/favicon.ico' %}>
-    
-        <link rel="stylesheet" type="text/css" href="{% static 'crm/simpleStyle.css' %}">
-    </head>
-    <body>
-        <a class = "button" href = {%url 'index'%}>К индексу</a>
-        <a class = "button" href={%url 'refreshClients' %}>Обновить</a>
-        <form action="{% url 'mountlyReport' %}" method="post">
-            {% csrf_token %}
-            <input type="month" id="month" name="month"min="2022-05">
-            <input type="submit" value="Поиск по месяцу">
-        </form>
-        <p>Всего проведено уроков:{{totalLessonsCount}}</p>
-        <p>В человекочасах:{{totalLessonsPeopleCount}}</p>
-        <p>На сумму:{{totalLessonsMoneyCount}}</p>
-        <hr>
-        <p>Всего проведено платежей:{{totalPayCount}}</p>
-        <p>На сумму:{{totalPay}}</p>
-        <p>Разница:{{totalPayDiff}}</p>  
-        <hr>
-        <h3>Должники</h3>   
-        <table>
-            <tr>
-                <th>Имя</th>
-                <th>Телефон</th>
-                <th>Остаток</th>
-                <th>Кнопочки</th>
-            </tr>
-            {%for student in clients%}
-                <tr>
-                    <td>{{student.name}}</td>
-                    <td>{%for phone in student.phone%}
-                        {{phone.note}}-{{phone.phone}}<br>
-                        {%endfor%}
-                    </td>
-                    <td>{{student.money}}</td>
-                    <td><a href="{% url 'client_card' student.id %}"><button>Подробнее</button></a></td>
-                </tr>
-            {%endfor%} 
-        </table>
-        <h3>По учителям</h3> 
-        <table>
-            <tr>
-                <th>Имя</th>
-                <th># Уроков</th>
-                <th># Человекочасов</th>
-                <th># Часовая эффективность(простая)</th>
-                <th># Денег принесено</th>
-                <th># Зарплата</th>
-                <th># Прибыль</th>
-            </tr>
-            {%for teacher in teacher_data%}
-            <tr>
-                <td>{{teacher.name}}</td>
-                <td>{{teacher.lessonCount}}</td>
-                <td>{{teacher.hourCount}}</td>
-                <td>{{teacher.eff}}</td>
-                <td>{{teacher.totalPay}}</td>
-                <td>{{teacher.payday}}</td>
-                <td>{{teacher.highroll}}</td>
-            </tr>
-                {%for lesson in teacher.lessonHystory%}
-                <tr>
-                    <td>{{lesson.name}}</td>
-                    <td>{{lesson.date}}</td>
-                    <td>{{lesson.clients.count}}</td>
-                </tr>   
-                {%endfor%}
-            {%endfor%} 
-            <tr>
-                <td>Итог</td>
-                <td>Итог</td>
-                <td>Итог</td>
-                <td>Итог</td>
-                <td>Итог</td>
-                <td>Итог</td>
-                <td>{{totalHighRoll}}</td>
-            </tr>
-        </table> 
+{% extends "crm/base.html" %}
+{% block title %}Index{% endblock %}
+{% block content %}
+<div class="row g-4">
+    <div class="col-sm-12 col-xl-12">
+        <div id='newClient' class="row bg-secondary rounded h-100 p-4">
+                <form action="{% url 'mountlyReport' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        <div class="col-sm-2"> 
+                            <a class="btn btn-primary" href={%url 'refreshClients' %}>Обновить</a>
+                        </div>  
+                        <div class="col-sm-2"> 
+                            <input type="month" class="form-control-sm" id="month" name="month"min="2022-05">
+                        </div> 
+                        <div class="col-sm-2"> 
+                            <button type="submit" class="btn btn-primary">Фильтр!</button>
+                        </div>         
+                    </div>
+                </form>
+            </div>
+        </div>
 
-    </body>
-</html>
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-secondary rounded h-100 p-4">
+            <p>Всего проведено уроков:{{totalLessonsCount}}</p>
+            <p>В человекочасах:{{totalLessonsPeopleCount}}</p>
+            <p>На сумму:{{totalLessonsMoneyCount}}</p>
+            <hr>
+            <p>Всего проведено платежей:{{totalPayCount}}</p>
+            <p>На сумму:{{totalPay}}</p>
+            <p>Разница:{{totalPayDiff}}</p>  
+            <hr>
+            </div>
+        </div>
+    
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h3>Должники</h3>  
+                <table>
+                    <tr>
+                        <th>Имя</th>
+                        <th>Телефон</th>
+                        <th>Остаток</th>
+                        <th>Кнопочки</th>
+                    </tr>
+                    {%for student in clients%}
+                        <tr>
+                            <td>{{student.name}}</td>
+                            <td>{%for phone in student.phone%}
+                                {{phone.note}}-{{phone.phone}}<br>
+                                {%endfor%}
+                            </td>
+                            <td>{{student.money}}</td>
+                            <td><a href="{% url 'client_card' student.id %}"><button>Подробнее</button></a></td>
+                        </tr>
+                    {%endfor%} 
+                </table>
+            </div>
+        </div>
+
+    
+        {%for teacher in teacher_data%}
+            {% if teacher.lessonCount > 0%}
+            <div class="col-sm-12 col-xl-6">
+                <div class="bg-secondary rounded h-100 p-4">
+                    <h4>{{teacher.name}}</h4>
+                    <p>Зартплата: {{teacher.payday}} рублей, Ч/Ч : {{teacher.hourCount}} часов</p>
+                    <table class = 'table'>
+                        <tr>
+                            <th>Группа</th>
+                            <th>Дата</th>
+                            <th># Человек</th>
+                        </tr>
+                        <!--
+                        <tr>
+                            <td>{{teacher.name}}</td>
+                            <td>{{teacher.lessonCount}}</td>
+                            <td>{{teacher.hourCount}}</td>
+                            <td>{{teacher.eff}}</td>
+                            <td>{{teacher.totalPay}}</td>
+                            <td>{{teacher.payday}}</td>
+                            <td>{{teacher.highroll}}</td>
+                        </tr>
+                        -->
+                        {%for lesson in teacher.lessonHystory%}
+                        <tr>
+                            <td>{{lesson.name}}</td>
+                            <td>{{lesson.date}}</td>
+                            <td>{{lesson.clients.count}}</td>
+                        </tr>   
+                        {%endfor%}
+                    </table>
+                </div>
+            </div>
+            {%else%}
+            <div class="col-sm-12 col-xl-6">
+                <div class="bg-secondary rounded h-100 p-4">
+                    <h4>{{teacher.name}} в этом месяце уроков не было</h4>
+                </div>
+            </div>                    
+            {%endif%}
+        {%endfor%}   
+    </div>  
+{% endblock %}

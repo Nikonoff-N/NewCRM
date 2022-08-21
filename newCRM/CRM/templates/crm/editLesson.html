@@ -1,51 +1,60 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="uft-8">
-        <title>Spark! CRM</title>
-        {% load static %}
-        <link rel="icon" type="image/ico" href={% static 'crm/img/favicon.ico' %}>
-    
-        <link rel="stylesheet" type="text/css" href="{% static 'crm/simpleStyle.css' %}">
-    </head>
-    <body>
-        <a class = "button" href = {%url 'index' %}>К индексу</a>
-        <h3>{{lessons.name}}</h3>
-        <p>Дата: {{lessons.date}}</p>
-        <p>Учитель: {{lessons.teacher}}</p>    
-        <p>Цена: {{lessons.price}}</p> 
-        <button onclick="document.getElementById('editPriceLessons').classList.remove('hidden');">Изменить стоимость</button>
-        <div id='editPriceLessons' class="hidden">
-            <form action="{%url 'editPriceLessons' %}" method="post" class='popup'>
-                {% csrf_token %}
-                <input type = "hidden" name = "lesson" value = "{{lessons.pk}}">
-                <table>
-                    <tr><td><label for = "price">Новая цена</label><input name = "price" type="number"></td></tr>
-                </table>
-                <input type="submit" value="Изменить">
-            </form>
-        </div>   
-               
-        <p>Ученики</p>   
+{% extends "crm/base.html" %}
+{% block title %}Index{% endblock %}
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h3>{{lessons.name}}</h3>
+                <p>Дата: {{lessons.date}}</p>
+                <p>Учитель: {{lessons.teacher}}</p>    
+                <p>Цена: {{lessons.price}}</p> 
+                <form action="{%url 'editPriceLessons' %}" method="post" class='popup'>
+                    {% csrf_token %}
+                    <input type = "hidden" name = "lesson" value = "{{lessons.pk}}">
+                    <div class="row mb-3">
+                        <label for = "price" class="col-sm-2 col-form-label">Новая цена</label>
+                        <div class="col-sm-4">
+                            <input name = "price" class="form-control" type="number">
+                        </div>
+                        <div class="col-sm-2"> 
+                            <button type="submit" class="btn btn-primary">Изменить!</button>
+                        </div> 
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-secondary rounded h-100 p-4">
+                <p>Ученики</p>   
         <ul>
             {% for client in lessons.clients.all %}
                 <li>{{client.name}} <a class = "button" href="{% url 'deleteLessonClient' lessons.pk client.pk %}">X</a></li>
             {% endfor %}
         </ul>
 
-        <button onclick="document.getElementById('addClientToLesson').classList.remove('hidden');">Добавить ученика</button>
+
         <div id='addClientToLesson' class="hidden">
             <form action="{%url 'addClientToLesson' %}" method="post" class='popup'>
                 {% csrf_token %}
                 <input type = "hidden" name = "lesson" value = "{{lessons.pk}}">
-                <label for = "clients">Ученик</label><br>
-                    <select id = "client" name = "client">
-                        {%for client in clients %}
-                            <option value = "{{client.pk}}">{{client.name}}</option>
-                        {%endfor%}
-                    </select>
-                <input type="submit" value="Добавить">
+                <div class="row mb-3">
+                    <label for = "clients" class="col-sm-2 col-form-label">Ученик</label>
+                    <div class="col-sm-2">
+                        <select id = "client" name = "client" class="form-select form-select-sm mb-3">
+                            {%for client in clients %}
+                                <option value = "{{client.pk}}">{{client.name}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                    <div class="col-sm-2"> 
+                        <button type="submit" class="btn btn-primary">Добавить</button>
+                    </div>    
+                </div>
             </form>
         </div>      
-    </body>
-</html>
+            </div>
+        </div>
+    </div>
+</div>    
+{% endblock %}

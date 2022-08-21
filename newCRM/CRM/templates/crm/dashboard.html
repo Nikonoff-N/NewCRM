@@ -1,0 +1,136 @@
+
+{% extends "crm/base.html" %}
+{% block title %}Index{% endblock %}
+{% block content %}
+    <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+            <div class="col-sm-12 col-xl-6">
+                <div class="bg-secondary rounded h-100 p-4">
+                    <h6 class="mb-4">Cегодня</h6>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Имя</th>
+                                <th scope="col">Ученики</th>
+                                <th scope="col">Расписание</th>
+                                <th scope="col">Кнопочки</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for group in groups%}
+                            <tr>
+                                <td>{{group.name}}<br>{{group.teacher}}</td>
+                                <td>
+                                    {%for s in group.clients.all%}
+                                        <a class = "btn btn-outline-primary m-2" href = {% url 'client_card' s.pk %}>{{s.name}}<a><br>
+                                    {%endfor%}
+                                </td>
+                                <td>
+                                    {% for s in group.schedule %}
+                                        {{s}}<br>
+                                    {%endfor%}
+                                </td>
+                                <td>
+                                    <a class = "btn btn-primary m-2" href = {%url 'addLessonFromGroup' group.pk %}>Создать урок</a>
+                                </td>
+                            </tr>            
+                            {%endfor%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-xl-6">
+                <div class="bg-secondary rounded h-100 p-4">
+                    <h6 class="mb-4">Завтра</h6>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Имя</th>
+                                <th scope="col">Ученики</th>
+                                <th scope="col">Расписание</th>
+                                <th scope="col">Кнопочки</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for group in tomorrow_groups%}
+                            <tr>
+                                <td>{{group.name}}<br>{{group.teacher}}</td>
+                                <td>
+                                    {%for s in group.clients.all%}
+                                        <a class = "btn btn-outline-primary m-2" href = {% url 'client_card' s.pk %}>{{s.name}}<a><br>
+                                    {%endfor%}
+                                </td>
+                                <td>
+                                    {% for s in group.schedule %}
+                                        {{s}}<br>
+                                    {%endfor%}
+                                </td>
+                                <td>
+                                    <a class = "btn btn-primary m-2" href = {%url 'addLessonFromGroup' group.pk %}>Создать урок</a>
+                                </td>
+                            </tr>            
+                            {%endfor%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-12 col-xl-6">
+                <div class="bg-secondary rounded h-100 p-4">
+                    <table class="table">
+                        <thead>
+                            <th scope="col">Имя</th>
+                            <th scope="col">Контакт</th>
+                        </thead>
+                        <tbody>
+                            {%for c in clients%}
+                            <tr>
+                                <td> <a class = "btn btn-outline-primary m-2" href = {% url 'client_card' c.id %}>{{c.name}}<a></td>
+                                <td>{%for phone in c.phone%}
+                                    {{phone.note}}-{{phone.phone}}<br>
+                                    <a class = "btn btn-warning m-2" href="sms:{{phone.phone}}?body={{c.message}}">SMS</a><br>
+                                    <a class = "btn btn-success m-2" href="https://wa.me/{{phone.phone}}?text={{c.message}}">WhatsAPP</a><br>
+                                    <a class = "btn btn-info m-2" href="tel:{{phone.phone}}">Позвонить</a><br>
+                                    {%endfor%}
+                                </td>
+                            </tr>
+                            {%endfor%}
+                        </tbody>    
+                    </table>
+                </div>
+            </div>
+            
+            <div class="col-sm-12 col-xl-6">
+                <div class="bg-secondary rounded h-100 p-4">
+                    <table class="table">
+                        <thead>
+                            <th scope="col">Имя</th>
+                            <th scope="col">Контакт</th>
+                        </thead>
+                        <tbody>
+                            {%for c in tomorrow_clients%}
+                            <tr>
+                                <td> <a class = "btn btn-outline-primary m-2" href = {% url 'client_card' c.id %}>{{c.name}}<a></td>
+                                <td>{%for phone in c.phone%}
+                                    {{phone.note}}-{{phone.phone}}<br>
+                                    <a class = "btn btn-warning m-2" href="sms:{{phone.phone}}?body={{c.message}}">SMS</a><br>
+                                    <a class = "btn btn-success m-2" href="https://wa.me/{{phone.phone}}?text={{c.message}}">WhatsAPP</a><br>
+                                    <a class = "btn btn-info m-2" href="tel:{{phone.phone}}">Позвонить</a><br>
+                                    {%endfor%}
+                                </td>
+                            </tr>
+                        {%endfor%}
+                        </tbody>    
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+       
+{% endblock %}

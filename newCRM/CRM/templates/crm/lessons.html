@@ -1,0 +1,75 @@
+
+{% extends "crm/base.html" %}
+{% block title %}Index{% endblock %}
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-12">
+            <div class="bg-secondary rounded h-100 p-4">
+    <h6 class="mb-4">Фильтры</h6>        
+    <form action="{% url 'CRM_Lessons' %}" method="post">
+        {% csrf_token %}
+        <div class="row mb-3">
+            <label for="month" class="col-sm-1 col-form-label">Месяц:</label>
+            <div class="col-sm-2">
+                <input type="month" class="form-control"  id="month" name="month"min="2022-05">
+            </div>
+            <label for="teacher" class="col-sm-1 col-form-label">Учитель:</label>
+            <div class="col-sm-2">
+                <select class="form-select form-select-sm mb-3" id = "teacher" name = "teacher">
+                    <option selected value = "-1">Все</option>
+                    {%for teacher in teachers%}
+                        <option value = "{{teacher.pk}}">{{teacher.name}}</option>
+                    {%endfor%}
+                </select>
+            </div>
+            <label for="group" class="col-sm-1 col-form-label">Группа:</label>
+            <div class="col-sm-2">
+                <select class="form-select form-select-sm mb-3"  id = "group" name = "group">
+                    <option selected value = "-1">Все</option>
+                    {%for group in groups%}
+                        <option value = "{{group.pk}}">{{group.name}}{%if group.archive%}(архив){%endif%}</option>
+                    {%endfor%}
+                </select>
+            </div>  
+            <div class="col-sm-2"> 
+                <button type="submit" class="btn btn-primary">Фильтр!</button>
+            </div>         
+        </div>
+    </form>
+</div>
+</div>
+
+<div class="col-sm-12 col-xl-12">
+    <div class="bg-secondary rounded h-100 p-4">
+            <table class="table">
+            <tr>
+                <th>Дата</th>
+                <th>Группа</th>
+                <th>Учитель</th>
+                <th>Цена</th>
+                <th>Студенты</th>
+                <th>Кнопочки</th>
+            </tr>
+            {%for lesson in lessons %}
+                <tr>
+                    <td>{{lesson.date}}</td>
+                    <td>{{lesson.name}}</td>
+                    <td>{{lesson.teacher.name}}</td>
+                    <td>{{lesson.price}}</td>
+                    <td>
+                        {%for s in lesson.clients.all%}
+                        <a class = "btn btn-outline-primary m-2" href = {%url 'client_card' s.pk %}>{{s.name}}</a></br>
+                        {%endfor%}
+                    </td>
+                    <td>
+                        <a href="{% url 'editLesson' lesson.pk %}" class = "btn btn-primary m-2">Редактировать</a>
+                    </td>
+                </tr>
+            {%endfor%}
+        </table>
+    </div>
+</div>
+</div>
+</div>
+    {% endblock %}

@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="uft-8">
-        <title>Spark! CRM</title>
-        {% load static %}
-        <link rel="icon" type="image/ico" href={% static 'crm/img/favicon.ico' %}>
-        <link rel="stylesheet" type="text/css" href="{% static 'crm/simpleStyle.css' %}">
-    </head>
-    <body>
-        <a class = "button" href = {%url 'index' %}>К индексу</a>
+{% extends "crm/base.html" %}
+{% block title %}Index{% endblock %}
+{% block content %}
         {% if group.archive %}
             <p>Архивная группа <a class = "button" href = {%url 'switchGroupArchive' group.pk %}>Вернуть из архива</a></p>
         {%else%}
@@ -16,7 +8,7 @@
         {%endif%}
         <h3>{{group.name}}</h3>
         <p>Учитель: {{group.teacher}}</p>
-        <h5>Ученики: <button onclick="document.getElementById('addClientToGroup').classList.remove('hidden');">Добавить ученика</button></h5> 
+        <h5>Ученики: </h5> 
         <div id='addClientToGroup' class="hidden">
             <form action="{%url 'addClientToGroup' %}" method="post" class='popup'>
                 {% csrf_token %}
@@ -38,7 +30,7 @@
         
 
 
-        <h5>Расписание: <button onclick="document.getElementById('editGroupData').classList.remove('hidden');">Изменить время занятий</button></h5>
+        <h5>Расписание:</h5>
         <ul>
         {% for s in group.schedule %}
             <li>{{s}}</li>
@@ -97,5 +89,5 @@
             </form>
         </div>
 
-    </body>
-</html>
+{% endblock %}
+

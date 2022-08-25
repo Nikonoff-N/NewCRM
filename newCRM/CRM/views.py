@@ -7,6 +7,8 @@ from datetime import datetime
 import json
 from .models import *
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.views import View
+from .forms import *
 DAYS = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс']
 
    
@@ -14,14 +16,30 @@ def is_teacher(user):
     return user.groups.filter(name='Teacher').exists()
 
 @login_required
-#@user_passes_test(lambda u: u.groups.filter(name='admin').exists(),login_url='teachersDashbord')
 def index(request):
-    if request.user.is_authenticated:
-        username = request.user.username
-    else:
-        #user = "None"
-        return HttpResponseRedirect(reverse('forbiden', args=()))
     return HttpResponseRedirect(reverse('dashboard', args=()))
+
+class loginView(View):
+    def get(self,request):
+        template = loader.get_template('crm/login.html')
+        context = {}
+        return HttpResponse(template.render(context, request))
+    
+    def post(self,request):
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(username=cd['username'], password=cd['password'])
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponse('Authenticated successfully')
+                else:
+                    return HttpResponse('Disabled account')
+            else:
+                return HttpResponse('Invalid login')
+
+
 
 def loginView(request):
     template = loader.get_template('crm/login.html')

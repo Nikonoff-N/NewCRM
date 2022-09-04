@@ -580,7 +580,7 @@ def switch_archive_group(request,group_id):
 
 #====================================================================
 @login_required
-@user_passes_test(lambda u: u.groups.filter(name='admin').exists(),login_url='teachersDashbord')
+#@user_passes_test(lambda u: u.groups.filter(name='admin').exists(),login_url='teachersDashbord')
 def mountlyReport(request):
     pay = 130
     if 'month' in request.POST:
